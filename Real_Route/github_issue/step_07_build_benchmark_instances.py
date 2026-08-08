@@ -40,20 +40,20 @@ KNOWN_RISKY_RECORD_IDS = {
 
 VALID_LEVEL2_BY_LEVEL1 = {
     "Ambiguity": {
-        "ambiguous formal definition",
-        "ambiguous method behavior",
+        "Ambiguous Definition",
+        "Ambiguous Procedure",
     },
     "Incompleteness": {
-        "missing algorithmic specification",
-        "missing hyperparameter protocol",
-        "missing model architecture",
-        "missing evaluation protocol",
-        "missing data/preprocessing protocol",
+        "Missing Algorithmic Procedure",
+        "Missing Configuration Protocol",
+        "Missing Model Specification",
+        "Missing Evaluation Specification",
+        "Missing Data Specification",
     },
     "Inconsistency": {
-        "inconsistent objective or loss",
-        "inconsistent architecture or pipeline",
-        "inconsistent model specification",
+        "Conflicting Objective",
+        "Conflicting Model Design",
+        "Conflicting Formal Definition",
     },
 }
 
@@ -67,18 +67,16 @@ VALID_LEVEL1 = set(VALID_LEVEL2_BY_LEVEL1.keys())
 VALID_LEVEL2 = set(LEVEL2_TO_LEVEL1.keys())
 
 VALID_CODIFICATION_SLOTS = {
-    "task",
-    "input",
-    "output",
-    "core_method",
-    "algorithm",
-    "training",
-    "evaluation",
-    "implementation_detail",
-    "code_behavior",
-    "preprocessing",
-    "data",
-    "inference",
+    "TASK_AND_IO",
+    "CORE_ALGORITHM",
+    "MODEL_ARCHITECTURE",
+    "OBJECTIVE_AND_SUPERVISION",
+    "TRAINING_PROCEDURE",
+    "DATA_AND_PREPROCESSING",
+    "INFERENCE_AND_DECISION",
+    "EVALUATION_PROTOCOL",
+    "INTERNAL_CONSISTENCY",
+    "NONE",
 }
 
 VALID_GRANULARITY = {"coarse", "medium", "fine"}
@@ -275,19 +273,24 @@ def infer_github_resolution_role(gap: Dict[str, Any], granularity: str) -> str:
     if hint in VALID_RESOLUTION_ROLES:
         return hint
 
-    affected = str(gap.get("affected_component") or "").lower()
-    level2 = str(gap.get("level2") or "").lower()
+    affected = str(gap.get("affected_component") or "").strip().upper()
+    level2 = str(gap.get("level2") or "").strip()
     codification_slot = infer_github_codification_slot(gap)
 
-    if affected == "evaluation" or codification_slot == "evaluation":
+    if affected == "EVALUATION_PROTOCOL" or codification_slot == "EVALUATION_PROTOCOL":
         return "reproducibility_detail"
 
-    if "evaluation protocol" in level2 or "data/preprocessing protocol" in level2:
+    if level2 in {
+        "Missing Evaluation Specification",
+        "Missing Data Specification",
+        "Missing Configuration Protocol",
+    }:
         return "reproducibility_detail"
 
     role = P7.infer_resolution_role(gap, granularity)
     if role == "implementation_blocker" and (
-        "hyperparameter" in level2 or "evaluation" in affected
+        level2 == "Missing Configuration Protocol"
+        or affected == "EVALUATION_PROTOCOL"
     ):
         return "reproducibility_detail"
 
@@ -310,7 +313,7 @@ def infer_github_codification_slot(gap: Dict[str, Any]) -> str:
         if slot in VALID_CODIFICATION_SLOTS:
             return slot
 
-    affected = str(gap.get("affected_component") or "").strip().lower()
+    affected = str(gap.get("affected_component") or "").strip().upper().replace(" ", "_")
     if affected in VALID_CODIFICATION_SLOTS:
         return affected
 
@@ -321,7 +324,7 @@ def infer_github_codification_slot(gap: Dict[str, Any]) -> str:
     except Exception:
         pass
 
-    return "implementation_detail"
+    return "NONE"
 
 
 def infer_github_granularity(gap: Dict[str, Any]) -> str:
@@ -489,10 +492,10 @@ Important constraints:
 
 Allowed labels:
 Level-1 = Ambiguity | Incompleteness | Inconsistency
-Level-2 = ambiguous formal definition | ambiguous method behavior | missing algorithmic specification | missing hyperparameter protocol | missing model architecture | missing evaluation protocol | missing data/preprocessing protocol | inconsistent objective or loss | inconsistent architecture or pipeline | inconsistent model specification
+Level-2 = Ambiguous Definition | Ambiguous Procedure | Missing Algorithmic Procedure | Missing Configuration Protocol | Missing Model Specification | Missing Evaluation Specification | Missing Data Specification | Conflicting Objective | Conflicting Model Design | Conflicting Formal Definition
 Granularity = coarse | medium | fine
 Resolution role = implementation_blocker | open_design_choice | reproducibility_detail | inconsistency_to_resolve
-Codification slot = task | input | output | core_method | algorithm | training | evaluation | implementation_detail | code_behavior | preprocessing | data | inference
+Codification slot = TASK_AND_IO | CORE_ALGORITHM | MODEL_ARCHITECTURE | OBJECTIVE_AND_SUPERVISION | TRAINING_PROCEDURE | DATA_AND_PREPROCESSING | INFERENCE_AND_DECISION | EVALUATION_PROTOCOL | INTERNAL_CONSISTENCY | NONE
 Action type = clarification_question | evidence_seeking | experiment_selection
 
 Fixed defect to use:
@@ -674,6 +677,26 @@ def enforce_github_defect_roles(instance: Dict[str, Any]) -> Dict[str, Any]:
     defects = instance.get("defects") or []
     if not defects:
         return instance
+
+    defect = dict(defects[0])
+    slot = str(defect.get("codification_slot") or defect.get("slot") or "")
+    level2 = str(defect.get("level2") or "").strip()
+    role = str(defect.get("resolution_role") or "")
+
+    if slot == "EVALUATION_PROTOCOL" or level2 == "Missing Evaluation Specification":
+        if role == "implementation_blocker":
+            defect["resolution_role"] = "reproducibility_detail"
+
+    if level2 == "Missing Configuration Protocol":
+        if role == "implementation_blocker":
+            defect["resolution_role"] = "reproducibility_detail"
+
+    if level2 == "Missing Data Specification":
+        if slot == "DATA_AND_PREPROCESSING" and role not in VALID_RESOLUTION_ROLES:
+            defect["resolution_role"] = "reproducibility_detail"
+
+    instance["defects"] = [defect] + list(defects[1:])
+    return instance
 
     defect = dict(defects[0])
     slot = str(defect.get("codification_slot") or defect.get("slot") or "")
@@ -927,10 +950,10 @@ def validate_instance_compat(
             slot = str(defects[0].get("codification_slot") or defects[0].get("slot") or "")
             has_new_label = (
                 level2 in {
-                    "missing evaluation protocol",
-                    "missing data/preprocessing protocol",
+                    "Missing Evaluation Specification",
+                    "Missing Data Specification",
                 }
-                or slot in {"preprocessing", "data", "inference"}
+                or slot in {"DATA_AND_PREPROCESSING", "INFERENCE_AND_DECISION", "EVALUATION_PROTOCOL"}
             )
 
         if not has_new_label:

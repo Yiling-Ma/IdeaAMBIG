@@ -266,20 +266,20 @@ def get_best_original_text(record: Dict[str, Any], max_chars: int) -> Dict[str, 
 
 VALID_LEVEL2_BY_LEVEL1 = {
     "Ambiguity": {
-        "ambiguous formal definition",
-        "ambiguous method behavior",
+        "Ambiguous Definition",
+        "Ambiguous Procedure",
     },
     "Incompleteness": {
-        "missing algorithmic specification",
-        "missing hyperparameter protocol",
-        "missing model architecture",
-        "missing evaluation protocol",
-        "missing data/preprocessing protocol",
+        "Missing Algorithmic Procedure",
+        "Missing Configuration Protocol",
+        "Missing Model Specification",
+        "Missing Evaluation Specification",
+        "Missing Data Specification",
     },
     "Inconsistency": {
-        "inconsistent objective or loss",
-        "inconsistent architecture or pipeline",
-        "inconsistent model specification",
+        "Conflicting Objective",
+        "Conflicting Model Design",
+        "Conflicting Formal Definition",
     },
 }
 
@@ -290,24 +290,18 @@ VALID_LEVEL2_TO_LEVEL1 = {
 }
 
 VALID_AFFECTED_COMPONENTS = {
-    "input",
-    "output",
-    "core_method",
-    "algorithm",
-    "training",
-    "evaluation",
-    "implementation_detail",
-    "code_behavior",
-    "preprocessing",
-    "data",
-    "inference",
+    "TASK_AND_IO",
+    "CORE_ALGORITHM",
+    "MODEL_ARCHITECTURE",
+    "OBJECTIVE_AND_SUPERVISION",
+    "TRAINING_PROCEDURE",
+    "DATA_AND_PREPROCESSING",
+    "INFERENCE_AND_DECISION",
+    "EVALUATION_PROTOCOL",
+    "INTERNAL_CONSISTENCY",
+    "NONE",
 }
 
-AFFECTED_COMPONENT_ALIASES = {
-    "model_architecture": "core_method",
-    "hyperparameter": "training",
-    "postprocessing": "output",
-}
 
 VALID_SOLUTION_SOURCE_TYPES = {
     "author_clarification",
@@ -394,35 +388,12 @@ def validate_taxonomy_label(level1: str, level2: str) -> bool:
 
 
 def normalize_level2_label(x: Any) -> str:
-    raw = str(x or "").strip().lower()
-    aliases = {
-        "missing evaluation": "missing evaluation protocol",
-        "missing metric protocol": "missing evaluation protocol",
-        "missing evaluation metric protocol": "missing evaluation protocol",
-        "missing data protocol": "missing data/preprocessing protocol",
-        "missing preprocessing protocol": "missing data/preprocessing protocol",
-        "missing data construction protocol": "missing data/preprocessing protocol",
-        "missing data preprocessing protocol": "missing data/preprocessing protocol",
-        "missing architecture": "missing model architecture",
-        "missing model specification": "missing model architecture",
-        "missing algorithm": "missing algorithmic specification",
-        "missing algorithmic detail": "missing algorithmic specification",
-        "inconsistent loss": "inconsistent objective or loss",
-        "inconsistent objective": "inconsistent objective or loss",
-        "inconsistent pipeline": "inconsistent architecture or pipeline",
-        "inconsistent architecture": "inconsistent architecture or pipeline",
-        "inconsistent model": "inconsistent model specification",
-    }
-    if raw in aliases:
-        return aliases[raw]
-    for labels in VALID_LEVEL2_BY_LEVEL1.values():
-        if raw in labels:
-            return raw
+    text = str(x or "").strip()
     for labels in VALID_LEVEL2_BY_LEVEL1.values():
         for label in labels:
-            if label in raw:
+            if text.lower() == label.lower():
                 return label
-    return raw
+    return text
 
 
 def validate_affected_component(x: str) -> bool:
@@ -430,8 +401,11 @@ def validate_affected_component(x: str) -> bool:
 
 
 def normalize_affected_component(x: Any) -> str:
-    raw = str(x or "").strip().lower()
-    return AFFECTED_COMPONENT_ALIASES.get(raw, raw)
+    text = str(x or "").strip().upper().replace(" ", "_").replace("-", "_")
+    text = re.sub(r"_+", "_", text)
+    if text in VALID_AFFECTED_COMPONENTS:
+        return text
+    return str(x or "").strip()
 
 
 def validate_solution_source_type(x: str) -> bool:
@@ -611,7 +585,7 @@ Special hyperparameter / ordinary value rule:
 - If a missing slot is a non-standard, method-defining hyperparameter, it may be kept.
 - If ordinary hyperparameters are mentioned together with a valid method-specific gap, extract only the method-specific gap and exclude ordinary optimizer/lr/batch-size details from gap_summary and gold_clarified_detail unless they are inseparable from the reported solution.
 - For number of epochs, keep only if the real missing slot is a stopping/training-duration protocol, not merely an epoch count.
-- Weight initialization should usually be treated as missing hyperparameter protocol unless the evidence explicitly frames it as an architecture or paper-code inconsistency.
+- Weight initialization should usually be treated as Missing Configuration Protocol unless the evidence explicitly frames it as an architecture or paper-code inconsistency.
 
 Special reproducer-improvement rule:
 - A reproducer assumption or workaround is valid only if it fills a clearly identified missing or ambiguous slot in the original paper.
@@ -693,51 +667,51 @@ Fixed taxonomy:
 
 Level-1 = Ambiguity
 
-1. ambiguous formal definition
+1. Ambiguous Definition
 Definition: A symbol, notation, mathematical object, or formal rule is underspecified, leaving multiple plausible interpretations. The ambiguity changes what an implementer would compute or instantiate.
 
-2. ambiguous method behavior
+2. Ambiguous Procedure
 Definition: A method component, training procedure, inference rule, or evaluation behavior is described but its operational behavior is unclear. Multiple plausible implementations are possible and may lead to different results.
 
 Level-1 = Incompleteness
 
-3. missing algorithmic specification
+3. Missing Algorithmic Procedure
 Definition: A core algorithmic step, interface, update rule, routing decision, or procedural detail is omitted. Without this detail, the method cannot be faithfully implemented.
 
-4. missing hyperparameter protocol
+4. Missing Configuration Protocol
 Definition: A result-sensitive hyperparameter is introduced, but the paper does not specify how its value is chosen, tuned, or validated. The issue is the missing selection protocol rather than a single ordinary unreported value.
 
-5. missing model architecture
+5. Missing Model Specification
 Definition: The paper states that a model or module is used but omits structural details such as layer type, normalization, pooling, activation, initialization, or dimensional mapping. These omissions materially affect the implemented model.
 
-6. missing evaluation protocol
+6. Missing Evaluation Specification
 Definition: The evaluation setup is incomplete, including missing metric computation rules, evaluation data splits, prompt sets, thresholds, sampling procedures, or evaluation model configuration. The omission prevents faithful reproduction of reported results.
 
-7. missing data/preprocessing protocol
+7. Missing Data Specification
 Definition: The data construction, filtering, labeling, augmentation, normalization, tokenization, segmentation, or input transformation procedure is not fully specified. As a result, implementers may construct different inputs or supervision signals.
 
 Level-1 = Inconsistency
 
-8. inconsistent objective or loss
+8. Conflicting Objective
 Definition: The paper and another source, such as code or an appendix, specify different training objectives, loss terms, reward definitions, or optimization targets. Following each source would optimize a materially different objective.
 
-9. inconsistent architecture or pipeline
+9. Conflicting Model Design
 Definition: The paper and another source specify different model architectures, module configurations, data pipelines, preprocessing steps, or training/evaluation pipelines. The inconsistency makes it unclear which version should be followed.
 
-10. inconsistent model specification
+10. Conflicting Formal Definition
 Definition: Two sources specify conflicting formal model assumptions, such as distributions, conditioning sets, aggregation rules, sampling support, or probabilistic/inference definitions. The discrepancy changes the underlying model being implemented.
 
 Taxonomy decision rules:
 - Assign exactly one Level-1 label for each kept gap.
 - Assign exactly one Level-2 label from the list above.
 - If two categories fit, choose the one that best describes the primary implementation blocker.
-- If the issue is about architecture structure, layer split, activation placement, or named architecture choice, prefer "missing model architecture" unless it is explicitly a paper-code contradiction.
-- If the issue is about metric computation, evaluation split, prompt set, threshold, sampling, or evaluator configuration, prefer "missing evaluation protocol".
-- If the issue is about data construction, filtering, labeling, augmentation, normalization, tokenization, segmentation, or input transformation, prefer "missing data/preprocessing protocol".
-- If the issue is about a core algorithmic procedure or update rule that is not evaluation/data/preprocessing, prefer "missing algorithmic specification".
-- If the issue is about a missing tuning, initialization, stopping, selection, or hyperparameter protocol, prefer "missing hyperparameter protocol".
+- If the issue is about architecture structure, layer split, activation placement, or named architecture choice, prefer "Missing Model Specification" unless it is explicitly a paper-code contradiction.
+- If the issue is about metric computation, evaluation split, prompt set, threshold, sampling, or evaluator configuration, prefer "Missing Evaluation Specification".
+- If the issue is about data construction, filtering, labeling, augmentation, normalization, tokenization, segmentation, or input transformation, prefer "Missing Data Specification".
+- If the issue is about a core algorithmic procedure or update rule that is not evaluation/data/preprocessing, prefer "Missing Algorithmic Procedure".
+- If the issue is about a missing tuning, initialization, stopping, selection, or hyperparameter protocol, prefer "Missing Configuration Protocol".
 - If the issue is paper-code contradiction, prefer an inconsistency label.
-- If the issue is a paper figure or diagram that implies a different architecture than the authors' code, prefer "Inconsistency / inconsistent architecture or pipeline".
+- If the issue is a paper figure or diagram that implies a different architecture than the authors' code, prefer "Inconsistency / Conflicting Model Design".
 - The Level-2 label must be consistent with the Level-1 label.
 
 Return JSON only with exactly this schema:
@@ -763,9 +737,9 @@ Return JSON only with exactly this schema:
       "solution_quote": "",
       "solution_source_type": "author_clarification|code_derived|reproducer_assumption|reproducer_workaround",
       "source_specification_quote_from_original_paper": "",
-      "affected_component": "input|output|core_method|algorithm|training|evaluation|implementation_detail|code_behavior|preprocessing|data|inference",
+      "affected_component": "TASK_AND_IO|CORE_ALGORITHM|MODEL_ARCHITECTURE|OBJECTIVE_AND_SUPERVISION|TRAINING_PROCEDURE|DATA_AND_PREPROCESSING|INFERENCE_AND_DECISION|EVALUATION_PROTOCOL|INTERNAL_CONSISTENCY|NONE",
       "level1": "Ambiguity|Incompleteness|Inconsistency",
-      "level2": "ambiguous formal definition|ambiguous method behavior|missing algorithmic specification|missing hyperparameter protocol|missing model architecture|missing evaluation protocol|missing data/preprocessing protocol|inconsistent objective or loss|inconsistent architecture or pipeline|inconsistent model specification",
+      "level2": "Ambiguous Definition|Ambiguous Procedure|Missing Algorithmic Procedure|Missing Configuration Protocol|Missing Model Specification|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition",
       "taxonomy_rationale": "",
       "gold_clarified_detail": "",
       "why_this_blocks_or_affects_codification": "",
@@ -785,9 +759,9 @@ Return JSON only with exactly this schema:
       "gap_summary": "",
       "gap_quote": "",
       "why_unresolved": "",
-      "affected_component": "input|output|core_method|algorithm|training|evaluation|implementation_detail|code_behavior|preprocessing|data|inference",
+      "affected_component": "TASK_AND_IO|CORE_ALGORITHM|MODEL_ARCHITECTURE|OBJECTIVE_AND_SUPERVISION|TRAINING_PROCEDURE|DATA_AND_PREPROCESSING|INFERENCE_AND_DECISION|EVALUATION_PROTOCOL|INTERNAL_CONSISTENCY|NONE",
       "level1": "Ambiguity|Incompleteness|Inconsistency",
-      "level2": "ambiguous formal definition|ambiguous method behavior|missing algorithmic specification|missing hyperparameter protocol|missing model architecture|missing evaluation protocol|missing data/preprocessing protocol|inconsistent objective or loss|inconsistent architecture or pipeline|inconsistent model specification",
+      "level2": "Ambiguous Definition|Ambiguous Procedure|Missing Algorithmic Procedure|Missing Configuration Protocol|Missing Model Specification|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition",
       "taxonomy_rationale": "",
       "candidate_strength": "strong|borderline|weak",
       "strength_rationale": "",
@@ -903,7 +877,7 @@ def add_borderline_flags(g: Dict[str, Any]) -> Dict[str, Any]:
     flags["generic_gap_quote"] = is_generic_gap_quote(g.get("gap_quote", ""))
 
     flags["needs_hparam_manual_review"] = (
-        g.get("level2") == "missing hyperparameter protocol"
+        g.get("level2") == "Missing Configuration Protocol"
         and bool(ordinary_hparams)
     )
     flags["needs_improvement_manual_review"] = bool(improvement_terms)

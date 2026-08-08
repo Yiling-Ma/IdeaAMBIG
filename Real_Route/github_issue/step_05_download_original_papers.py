@@ -44,20 +44,20 @@ DEFAULT_OPENAI_MODEL = (
 
 VALID_LEVEL2_BY_LEVEL1 = {
     "Ambiguity": {
-        "ambiguous formal definition",
-        "ambiguous method behavior",
+        "Ambiguous Definition",
+        "Ambiguous Procedure",
     },
     "Incompleteness": {
-        "missing algorithmic specification",
-        "missing hyperparameter protocol",
-        "missing model architecture",
-        "missing evaluation protocol",
-        "missing data/preprocessing protocol",
+        "Missing Algorithmic Procedure",
+        "Missing Configuration Protocol",
+        "Missing Model Specification",
+        "Missing Evaluation Specification",
+        "Missing Data Specification",
     },
     "Inconsistency": {
-        "inconsistent objective or loss",
-        "inconsistent architecture or pipeline",
-        "inconsistent model specification",
+        "Conflicting Objective",
+        "Conflicting Model Design",
+        "Conflicting Formal Definition",
     },
 }
 
@@ -71,20 +71,16 @@ VALID_LEVEL1 = set(VALID_LEVEL2_BY_LEVEL1.keys())
 VALID_LEVEL2 = set(LEVEL2_TO_LEVEL1.keys())
 
 VALID_AFFECTED_COMPONENTS = {
-    "input",
-    "output",
-    "core_method",
-    "algorithm",
-    "training",
-    "evaluation",
-    "implementation_detail",
-    "model_architecture",
-    "hyperparameter",
-    "code_behavior",
-    "preprocessing",
-    "postprocessing",
-    "data",
-    "inference",
+    "TASK_AND_IO",
+    "CORE_ALGORITHM",
+    "MODEL_ARCHITECTURE",
+    "OBJECTIVE_AND_SUPERVISION",
+    "TRAINING_PROCEDURE",
+    "DATA_AND_PREPROCESSING",
+    "INFERENCE_AND_DECISION",
+    "EVALUATION_PROTOCOL",
+    "INTERNAL_CONSISTENCY",
+    "NONE",
 }
 
 VALID_SOLUTION_SOURCE_TYPES = {
@@ -134,27 +130,27 @@ Allowed Level-1 labels:
 
 Allowed Level-2 labels:
 Ambiguity:
-- ambiguous formal definition
-- ambiguous method behavior
+- Ambiguous Definition
+- Ambiguous Procedure
 
 Incompleteness:
-- missing algorithmic specification
-- missing hyperparameter protocol
-- missing model architecture
-- missing evaluation protocol
-- missing data/preprocessing protocol
+- Missing Algorithmic Procedure
+- Missing Configuration Protocol
+- Missing Model Specification
+- Missing Evaluation Specification
+- Missing Data Specification
 
 Inconsistency:
-- inconsistent objective or loss
-- inconsistent architecture or pipeline
-- inconsistent model specification
+- Conflicting Objective
+- Conflicting Model Design
+- Conflicting Formal Definition
 
 Labeling rules:
-- Use "missing evaluation protocol" for missing metric computation, evaluation data split, evaluation prompt set, evaluation threshold, evaluation sampling, number of evaluation seeds/samples, or evaluator configuration.
-- Use "missing data/preprocessing protocol" for missing input normalization, augmentation, tokenization, data filtering, label construction, train/validation data construction, segmentation, stride/windowing, or preprocessing before model input.
-- Use "missing algorithmic specification" for missing core method procedure, training-loop rule, update order, loss routing, sampling/update rule, or termination condition.
-- Use "missing hyperparameter protocol" only when the missing issue is how to select/tune/validate a hyperparameter, not merely a single ordinary unreported value.
-- Use "missing model architecture" for structural model choices such as activation, normalization, pooling, layer/module type, initialization, readout, dimensional mapping, or module wiring.
+- Use "Missing Evaluation Specification" for missing metric computation, evaluation data split, evaluation prompt set, evaluation threshold, evaluation sampling, number of evaluation seeds/samples, or evaluator configuration.
+- Use "Missing Data Specification" for missing input normalization, augmentation, tokenization, data filtering, label construction, train/validation data construction, segmentation, stride/windowing, or preprocessing before model input.
+- Use "Missing Algorithmic Procedure" for missing core method procedure, training-loop rule, update order, loss routing, sampling/update rule, or termination condition.
+- Use "Missing Configuration Protocol" only when the missing issue is how to select/tune/validate a hyperparameter, not merely a single ordinary unreported value.
+- Use "Missing Model Specification" for structural model choices such as activation, normalization, pooling, layer/module type, initialization, readout, dimensional mapping, or module wiring.
 - Use Inconsistency only when two concrete sources conflict, such as paper vs code, paper vs README, paper vs appendix, or two concrete implementation descriptions.
 - If uncertain, prefer Ambiguity or Incompleteness over Inconsistency unless explicit contradiction evidence exists.
 
@@ -235,43 +231,10 @@ def normalize_space(text: Any) -> str:
 
 
 def normalize_level2(label: Any) -> str:
-    raw = normalize_space(label).lower()
-
-    aliases = {
-        "ambiguous definition": "ambiguous formal definition",
-        "ambiguous formal specification": "ambiguous formal definition",
-        "ambiguous behavior": "ambiguous method behavior",
-        "ambiguous model behavior": "ambiguous method behavior",
-        "missing algorithm": "missing algorithmic specification",
-        "missing algorithmic detail": "missing algorithmic specification",
-        "missing training protocol": "missing algorithmic specification",
-        "missing training-loop protocol": "missing algorithmic specification",
-        "missing architecture": "missing model architecture",
-        "missing architectural specification": "missing model architecture",
-        "missing model specification": "missing model architecture",
-        "missing evaluation": "missing evaluation protocol",
-        "missing metric protocol": "missing evaluation protocol",
-        "missing evaluation metric protocol": "missing evaluation protocol",
-        "missing data protocol": "missing data/preprocessing protocol",
-        "missing preprocessing protocol": "missing data/preprocessing protocol",
-        "missing data construction protocol": "missing data/preprocessing protocol",
-        "missing data preprocessing protocol": "missing data/preprocessing protocol",
-        "inconsistent loss": "inconsistent objective or loss",
-        "inconsistent objective": "inconsistent objective or loss",
-        "inconsistent pipeline": "inconsistent architecture or pipeline",
-        "inconsistent architecture": "inconsistent architecture or pipeline",
-        "inconsistent model": "inconsistent model specification",
-    }
-
-    if raw in VALID_LEVEL2:
-        return raw
-    if raw in aliases:
-        return aliases[raw]
-
+    raw = normalize_space(label)
     for valid in VALID_LEVEL2:
-        if valid in raw:
+        if raw.lower() == valid.lower():
             return valid
-
     return ""
 
 
@@ -419,8 +382,8 @@ Return STRICT JSON:
   }},
   "rejection_reason": "insufficient_evidence|not_real_spec_gap|not_resolved|not_method_core|implementation_bug_not_spec_gap|repo_usage_not_method_spec_gap|tuning_or_best_practice_advice|other|null",
   "level1": "Ambiguity|Incompleteness|Inconsistency|null",
-  "level2": "ambiguous formal definition|ambiguous method behavior|missing algorithmic specification|missing hyperparameter protocol|missing model architecture|missing evaluation protocol|missing data/preprocessing protocol|inconsistent objective or loss|inconsistent architecture or pipeline|inconsistent model specification|null",
-  "affected_component": "input|output|core_method|algorithm|training|evaluation|implementation_detail|model_architecture|hyperparameter|code_behavior|preprocessing|data|postprocessing|inference|null",
+  "level2": "Ambiguous Definition|Ambiguous Procedure|Missing Algorithmic Procedure|Missing Configuration Protocol|Missing Model Specification|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition|null",
+  "affected_component": "TASK_AND_IO|CORE_ALGORITHM|MODEL_ARCHITECTURE|OBJECTIVE_AND_SUPERVISION|TRAINING_PROCEDURE|DATA_AND_PREPROCESSING|INFERENCE_AND_DECISION|EVALUATION_PROTOCOL|INTERNAL_CONSISTENCY|NONE|null",
   "solution_source_type": "author_clarification|maintainer_clarification|code_derived|reproducer_assumption|reproducer_workaround|null",
   "resolution_role_hint": "implementation_blocker|reproducibility_detail|open_design_choice|inconsistency_to_resolve|null",
   "gap_summary": "",
