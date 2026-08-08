@@ -6,77 +6,143 @@ from typing import Any, Dict, List, Optional, Tuple
 
 LEVEL2_TO_LEVEL1: Dict[str, str] = {
     # Ambiguity
-    "ambiguous formal definition": "Ambiguity",
-    "ambiguous method behavior": "Ambiguity",
+    "Ambiguous Definition": "Ambiguity",
+    "Ambiguous Procedure": "Ambiguity",
 
     # Incompleteness
-    "missing algorithmic specification": "Incompleteness",
-    "missing hyperparameter protocol": "Incompleteness",
-    "missing model architecture": "Incompleteness",
-    "missing evaluation protocol": "Incompleteness",
-    "missing data/preprocessing protocol": "Incompleteness",
+    "Missing Algorithmic Procedure": "Incompleteness",
+    "Missing Configuration Protocol": "Incompleteness",
+    "Missing Model Specification": "Incompleteness",
+    "Missing Evaluation Specification": "Incompleteness",
+    "Missing Data Specification": "Incompleteness",
 
     # Inconsistency
-    "inconsistent objective or loss": "Inconsistency",
-    "inconsistent architecture or pipeline": "Inconsistency",
-    "inconsistent model specification": "Inconsistency",
+    "Conflicting Objective": "Inconsistency",
+    "Conflicting Model Design": "Inconsistency",
+    "Conflicting Formal Definition": "Inconsistency",
 }
 
 VALID_LEVEL2 = set(LEVEL2_TO_LEVEL1.keys())
+
+VALID_SPECIFICATION_SLOTS = {
+    "TASK_AND_IO",
+    "CORE_ALGORITHM",
+    "MODEL_ARCHITECTURE",
+    "OBJECTIVE_AND_SUPERVISION",
+    "TRAINING_PROCEDURE",
+    "DATA_AND_PREPROCESSING",
+    "INFERENCE_AND_DECISION",
+    "EVALUATION_PROTOCOL",
+    "INTERNAL_CONSISTENCY",
+    "NONE",
+}
 
 
 TAXONOMY_BRIEF = """
 Allowed Level-2 taxonomy labels:
 
 Ambiguity
-1. ambiguous formal definition
-   A symbol, notation, mathematical object, or formal rule is underspecified,
-   leaving multiple plausible interpretations that change what is computed.
+1. Ambiguous Definition
+   A formal element, such as a symbol, notation, mathematical object, or rule, is
+   described without a sufficiently precise meaning. Multiple plausible
+   interpretations remain, leading implementers to compute or instantiate different
+   objects.
 
-2. ambiguous method behavior
-   A method component, training procedure, inference rule, or evaluation behavior
-   is described but its operational behavior is unclear, leaving multiple plausible
-   implementations.
+2. Ambiguous Procedure
+   A method operation, execution rule, inference behavior, or interaction between
+   components is described but its operational procedure is unclear. Different
+   implementations may follow different behaviors and produce different outcomes.
 
 Incompleteness
-3. missing algorithmic specification
-   A core algorithmic step, interface, update rule, routing decision, or procedural
-   detail is omitted, so the method cannot be faithfully implemented.
+3. Missing Algorithmic Procedure
+   A required operational step, algorithmic rule, update mechanism, decision
+   criterion, or execution procedure is omitted. Without this information, an
+   implementer cannot faithfully reproduce how the method operates.
 
-4. missing hyperparameter protocol
-   A result-sensitive hyperparameter is introduced, but the paper does not specify
-   how its value is chosen, tuned, or validated. The issue is the missing selection
-   protocol, not just a single ordinary unreported value.
+4. Missing Configuration Protocol
+   A result-sensitive configuration choice is introduced, but the specification does
+   not describe how the choice should be determined. Missing information concerns
+   the selection, tuning, or validation procedure for important settings (e.g.,
+   hyperparameters, thresholds, initialization choices, or sampling parameters),
+   rather than merely an omitted value.
 
-5. missing model architecture
-   The paper states that a model or module is used but omits structural details
-   such as layer type, normalization, pooling, activation, initialization, or
-   dimensional mapping.
+5. Missing Model Specification
+   A model or computational component is mentioned, but its structural configuration
+   is insufficiently specified. Missing details may include layer composition,
+   module organization, dimensional mapping, normalization, activation, or
+   parameterization choices that affect the instantiated model.
 
-6. missing evaluation protocol
-   The evaluation setup is incomplete, including missing metric computation rules,
-   evaluation data splits, prompt sets, thresholds, sampling procedures, number of
-   evaluation seeds/samples, or evaluation model configuration.
+6. Missing Evaluation Specification
+   The evaluation procedure is incompletely described, including missing metric
+   definitions, evaluation protocols, data splits, sampling procedures, prompts,
+   thresholds, or evaluation configurations. Such omissions prevent faithful
+   reproduction or comparison of reported results.
 
-7. missing data/preprocessing protocol
-   The data construction, filtering, labeling, augmentation, normalization,
-   tokenization, segmentation, windowing, or input transformation procedure is not
-   fully specified.
+7. Missing Data Specification
+   The construction or transformation of input data is incompletely described.
+   Missing details may include data filtering, labeling, augmentation,
+   normalization, tokenization, segmentation, or other preprocessing steps that
+   affect the resulting inputs or supervision signals.
 
 Inconsistency
-8. inconsistent objective or loss
-   The paper and another source specify different training objectives, loss terms,
-   reward definitions, or optimization targets.
+8. Conflicting Objective
+   The specification and another source, such as code, appendix, or supplementary
+   material, define different objectives, loss functions, reward signals, or
+   optimization targets. Following different sources would optimize materially
+   different goals.
 
-9. inconsistent architecture or pipeline
-   The paper and another source specify different model architectures, module
-   configurations, data pipelines, preprocessing steps, or training/evaluation
-   pipelines.
+9. Conflicting Model Design
+   Different sources specify incompatible model components, architectures,
+   preprocessing pipelines, or execution pipelines. The inconsistency makes it
+   unclear which design should be implemented.
 
-10. inconsistent model specification
-   Two sources specify conflicting formal model assumptions, such as distributions,
-   conditioning sets, aggregation rules, sampling support, or probabilistic/inference
-   definitions.
+10. Conflicting Formal Definition
+   Different sources provide incompatible formal assumptions or mathematical
+   definitions, such as distributions, conditioning rules, aggregation operations,
+   sampling assumptions, or inference formulations. The discrepancy changes the
+   underlying formal model being implemented.
+"""
+
+
+SPECIFICATION_SLOT_BRIEF = """
+Allowed specification slots for codification-readiness annotation:
+
+1. TASK_AND_IO
+   Use when the blocker concerns the research task, expected inputs, or expected
+   outputs.
+
+2. CORE_ALGORITHM
+   Use when the blocker concerns the central computational procedure or sequence of
+   operations that defines the method.
+
+3. MODEL_ARCHITECTURE
+   Use when the blocker concerns the structure or connectivity of the model.
+
+4. OBJECTIVE_AND_SUPERVISION
+   Use when the blocker concerns the objective being optimized or the supervision
+   used to train the method.
+
+5. TRAINING_PROCEDURE
+   Use when the blocker concerns how the model or method is trained.
+
+6. DATA_AND_PREPROCESSING
+   Use when the blocker concerns how data are constructed, selected, transformed,
+   or partitioned.
+
+7. INFERENCE_AND_DECISION
+   Use when the blocker concerns how model outputs are converted into final
+   predictions, rankings, actions, or decisions.
+
+8. EVALUATION_PROTOCOL
+   Use when the blocker concerns how the proposed method or research claim is
+   evaluated.
+
+9. INTERNAL_CONSISTENCY
+   Use only when two or more parts of the specification conflict.
+
+10. NONE
+    Select NONE only when the specification is labeled READY and no
+    implementation-critical blocker is present.
 """
 
 
@@ -96,38 +162,36 @@ Ambiguity vs. Incompleteness:
   operational interpretations.
 - Use Incompleteness when a necessary detail is simply absent.
 
-missing algorithmic specification:
+Missing Algorithmic Procedure:
 - Use for training-loop rules, update order, loss routing, interface operation,
   sampling/update rules, termination criteria, or algorithmic bookkeeping.
 - Do not use it as a catch-all if the missing detail is clearly evaluation, data,
-  preprocessing, hyperparameter selection, or model architecture.
+  preprocessing, configuration selection, or model structure.
 
-missing hyperparameter protocol:
-- Use when the missing detail is how to choose/tune/validate a hyperparameter.
+Missing Configuration Protocol:
+- Use when the missing detail is how to choose/tune/validate a configuration choice.
 - Do not use for a single ordinary unreported value unless the selection rule is
   itself the blocker.
 - If a parameter controls a procedure or schedule, and the procedure is the blocker,
-  prefer missing algorithmic specification.
+  prefer Missing Algorithmic Procedure.
 
-missing model architecture:
+Missing Model Specification:
 - Use for missing structural model choices: activation, normalization, pooling,
   layer/module type, initialization, readout, dimensional mapping, or module wiring.
-- If the missing detail is data transformation or evaluation behavior, do not use
-  this label.
 
-missing evaluation protocol:
+Missing Evaluation Specification:
 - Use for metric computation, evaluation split, prompt set, evaluation threshold,
-  inference-time measurement, evaluation sampling, number of evaluation seeds/samples,
-  evaluator model configuration, or protocol needed to reproduce reported numbers.
+  evaluation sampling, number of evaluation seeds/samples, evaluator configuration,
+  or protocol needed to reproduce reported numbers.
 - If the split or data processing is used to construct training data, prefer
-  missing data/preprocessing protocol.
+  Missing Data Specification.
 
-missing data/preprocessing protocol:
+Missing Data Specification:
 - Use for dataset construction, filtering, label construction, input normalization,
   augmentation, tokenization, serialization, segmentation/windowing, train/validation
   data construction, or preprocessing before model input.
 - If the data operation is only for computing evaluation metrics, prefer
-  missing evaluation protocol.
+  Missing Evaluation Specification.
 
 Inconsistency:
 - Use Inconsistency only when there is explicit contradiction between paper/code,
@@ -137,57 +201,8 @@ Inconsistency:
 """
 
 
-_ALIAS_MAP = {
-    # common casing / punctuation variants
-    "ambiguous formal definitions": "ambiguous formal definition",
-    "ambiguous method behaviours": "ambiguous method behavior",
-    "ambiguous method behaviour": "ambiguous method behavior",
-
-    "missing algorithm specification": "missing algorithmic specification",
-    "missing algorithmic details": "missing algorithmic specification",
-    "missing algorithmic detail": "missing algorithmic specification",
-    "missing training protocol": "missing algorithmic specification",
-    "missing inference protocol": "missing algorithmic specification",
-
-    "missing hyperparameter": "missing hyperparameter protocol",
-    "missing hyperparameter value": "missing hyperparameter protocol",
-    "missing hyperparameter selection": "missing hyperparameter protocol",
-    "missing hyperparameter tuning protocol": "missing hyperparameter protocol",
-
-    "missing architecture": "missing model architecture",
-    "missing architectural specification": "missing model architecture",
-    "missing architecture specification": "missing model architecture",
-
-    "missing eval protocol": "missing evaluation protocol",
-    "missing evaluation specification": "missing evaluation protocol",
-    "missing metric protocol": "missing evaluation protocol",
-    "missing metric computation protocol": "missing evaluation protocol",
-    "missing evaluation metric protocol": "missing evaluation protocol",
-
-    "missing preprocessing protocol": "missing data/preprocessing protocol",
-    "missing data protocol": "missing data/preprocessing protocol",
-    "missing data construction protocol": "missing data/preprocessing protocol",
-    "missing data processing protocol": "missing data/preprocessing protocol",
-    "missing input preprocessing protocol": "missing data/preprocessing protocol",
-    "missing augmentation protocol": "missing data/preprocessing protocol",
-
-    "inconsistent loss": "inconsistent objective or loss",
-    "inconsistent objective": "inconsistent objective or loss",
-    "inconsistent reward": "inconsistent objective or loss",
-    "inconsistent objective/loss": "inconsistent objective or loss",
-
-    "inconsistent architecture": "inconsistent architecture or pipeline",
-    "inconsistent pipeline": "inconsistent architecture or pipeline",
-    "inconsistent preprocessing pipeline": "inconsistent architecture or pipeline",
-
-    "inconsistent model": "inconsistent model specification",
-    "inconsistent formal model": "inconsistent model specification",
-    "inconsistent model specificatio": "inconsistent model specification",
-}
-
-
 def _clean_label(s: str) -> str:
-    s = str(s or "").strip().lower()
+    s = str(s or "").strip()
     s = s.replace("_", " ")
     s = s.replace("-", " ")
     s = re.sub(r"\s+", " ", s)
@@ -195,34 +210,29 @@ def _clean_label(s: str) -> str:
 
 
 def normalize_level2(level2: str) -> str:
-    """
-    Normalize a potentially noisy Level-2 string to one of VALID_LEVEL2.
-    Returns the cleaned string if unknown; caller can decide fallback.
-    """
+    """Normalize a Level-2 string to one of VALID_LEVEL2 via case-insensitive match."""
     x = _clean_label(level2)
-
-    if x in VALID_LEVEL2:
+    if not x:
         return x
-
-    if x in _ALIAS_MAP:
-        return _ALIAS_MAP[x]
-
-    # lightweight substring recovery
     for valid in VALID_LEVEL2:
-        if valid in x:
+        if x.lower() == valid.lower():
             return valid
-
-    for alias, valid in _ALIAS_MAP.items():
-        if alias in x:
-            return valid
-
     return x
 
 
+def normalize_specification_slot(slot: str) -> str:
+    """Normalize a specification slot to one of VALID_SPECIFICATION_SLOTS."""
+    x = str(slot or "").strip().upper().replace(" ", "_").replace("-", "_")
+    x = re.sub(r"_+", "_", x)
+    if x in VALID_SPECIFICATION_SLOTS:
+        return x
+    return str(slot or "").strip()
+
+
 INCONSISTENCY_LEVEL2 = {
-    "inconsistent objective or loss",
-    "inconsistent architecture or pipeline",
-    "inconsistent model specification",
+    "Conflicting Objective",
+    "Conflicting Model Design",
+    "Conflicting Formal Definition",
 }
 
 CONTRADICTION_SIGNALS = [
@@ -296,8 +306,8 @@ def suggest_inconsistency_relabel(gap: Dict[str, Any]) -> Optional[Tuple[str, st
 
     if any(term in text for term in evaluation_terms):
         if any(term in text for term in implementation_bug_terms):
-            return "Incompleteness", "missing evaluation protocol"
-        return "Ambiguity", "ambiguous method behavior"
+            return "Incompleteness", "Missing Evaluation Specification"
+        return "Ambiguity", "Ambiguous Procedure"
     return None
 
 
@@ -361,8 +371,8 @@ def apply_taxonomy_correction(
     """
     Deterministic light correction after LLM taxonomy assignment.
 
-    This function does NOT invent a new label aggressively. It mainly:
-    - normalizes Level-2 aliases,
+    This function mainly:
+    - normalizes Level-2 labels,
     - restores Level-1 from Level-2,
     - optionally applies conservative keyword corrections when context_text is given.
     """
@@ -372,19 +382,17 @@ def apply_taxonomy_correction(
     normalized_level2 = normalize_level2(original_level2)
 
     if normalized_level2 not in VALID_LEVEL2:
-        normalized_level2 = "ambiguous method behavior"
+        normalized_level2 = "Ambiguous Procedure"
 
     corrected = False
     correction_reason = ""
 
-    # Optional conservative correction using context text.
-    # This is intentionally conservative and only triggers for very explicit cues.
     if context_text:
         text = context_text.lower()
 
         evaluation_cues = [
             "evaluation", "evaluate", "metric", "fid", "clipscore", "aesthetic score",
-            "auc", "mAP".lower(), "score", "table", "prompt set", "test prompts",
+            "auc", "map", "score", "table", "prompt set", "test prompts",
             "drawbench", "eval_seeds", "threshold", "validator", "sampling seeds",
             "evaluation seeds", "inference uses", "ode during inference", "diversity",
             "n-jsd", "pickscore", "imagereward",
@@ -392,74 +400,53 @@ def apply_taxonomy_correction(
         data_preprocess_cues = [
             "preprocess", "preprocessing", "normalization", "normalize", "scale",
             "rgb", "augmentation", "augment", "blur", "jpeg", "crop", "resize",
-            "tokenization", "tokenize", "serialization", "windowing", "stride",
+            "tokenization", "polygon", "serialization", "windowing", "stride",
             "segmentation", "dataset construction", "label construction",
             "training data", "train split", "validation split", "train/val",
             "input transformation", "rasterize", "rasterization",
         ]
 
-        if normalized_level2 == "missing algorithmic specification":
+        if normalized_level2 == "Missing Algorithmic Procedure":
             if any(cue in text for cue in evaluation_cues):
-                normalized_level2 = "missing evaluation protocol"
+                normalized_level2 = "Missing Evaluation Specification"
                 corrected = True
-                correction_reason = "corrected missing algorithmic specification to missing evaluation protocol based on explicit evaluation/metric cues"
+                correction_reason = (
+                    "corrected Missing Algorithmic Procedure to Missing Evaluation "
+                    "Specification based on explicit evaluation/metric cues"
+                )
             elif any(cue in text for cue in data_preprocess_cues):
-                normalized_level2 = "missing data/preprocessing protocol"
+                normalized_level2 = "Missing Data Specification"
                 corrected = True
-                correction_reason = "corrected missing algorithmic specification to missing data/preprocessing protocol based on explicit data/preprocessing cues"
+                correction_reason = (
+                    "corrected Missing Algorithmic Procedure to Missing Data "
+                    "Specification based on explicit data/preprocessing cues"
+                )
 
     out["level2"] = normalized_level2
     out["level1"] = LEVEL2_TO_LEVEL1[normalized_level2]
 
-    if normalized_level2 != _clean_label(original_level2) or corrected:
+    if normalized_level2 != original_level2.strip() or corrected:
         out["taxonomy_auto_corrected"] = True
         out["taxonomy_original_level2"] = original_level2
-        out["taxonomy_correction_reason"] = correction_reason or "normalized taxonomy label alias"
+        out["taxonomy_correction_reason"] = correction_reason or "normalized taxonomy label"
     else:
         out["taxonomy_auto_corrected"] = False
 
     return out
 
 
-LEVEL2_DEFAULT_CODIFICATION_SLOT: Dict[str, str] = {
-    "ambiguous formal definition": "core_method",
-    "ambiguous method behavior": "core_method",
-    "missing algorithmic specification": "algorithm",
-    "missing hyperparameter protocol": "training",
-    "missing model architecture": "core_method",
-    "missing evaluation protocol": "evaluation",
-    "missing data/preprocessing protocol": "preprocessing",
-    "inconsistent objective or loss": "training",
-    "inconsistent architecture or pipeline": "core_method",
-    "inconsistent model specification": "core_method",
+LEVEL2_DEFAULT_SPECIFICATION_SLOT: Dict[str, str] = {
+    "Ambiguous Definition": "CORE_ALGORITHM",
+    "Ambiguous Procedure": "CORE_ALGORITHM",
+    "Missing Algorithmic Procedure": "CORE_ALGORITHM",
+    "Missing Model Specification": "MODEL_ARCHITECTURE",
+    "Missing Data Specification": "DATA_AND_PREPROCESSING",
+    "Missing Configuration Protocol": "TRAINING_PROCEDURE",
+    "Missing Evaluation Specification": "EVALUATION_PROTOCOL",
+    "Conflicting Objective": "INTERNAL_CONSISTENCY",
+    "Conflicting Model Design": "INTERNAL_CONSISTENCY",
+    "Conflicting Formal Definition": "INTERNAL_CONSISTENCY",
 }
-
-LEVEL2_DEFAULT_AFFECTED_COMPONENT: Dict[str, str] = {
-    "ambiguous formal definition": "core_method",
-    "ambiguous method behavior": "core_method",
-    "missing algorithmic specification": "algorithm",
-    "missing hyperparameter protocol": "hyperparameter",
-    "missing model architecture": "model_architecture",
-    "missing evaluation protocol": "evaluation",
-    "missing data/preprocessing protocol": "preprocessing",
-    "inconsistent objective or loss": "training",
-    "inconsistent architecture or pipeline": "core_method",
-    "inconsistent model specification": "model_architecture",
-}
-
-DATA_PREPROCESS_SLOT_CUES = [
-    "stride",
-    "window",
-    "token",
-    "normalize",
-    "preprocess",
-    "augment",
-    "filter",
-    "crop",
-    "resize",
-    "segmentation",
-    "label construction",
-]
 
 REFERENCE_LANGUAGE_PATTERNS = [
     re.compile(r"\bas proven in the literature\b", re.IGNORECASE),
@@ -494,32 +481,19 @@ def infer_codification_slot_from_level2(
     level2: Any,
     context_text: str = "",
 ) -> str:
+    del context_text  # reserved for future context-aware overrides
     normalized = normalize_level2(str(level2 or ""))
     if normalized not in VALID_LEVEL2:
-        return "implementation_detail"
-
-    if normalized == "missing data/preprocessing protocol":
-        text = str(context_text or "").lower()
-        if any(cue in text for cue in DATA_PREPROCESS_SLOT_CUES):
-            return "preprocessing"
-        return "data"
-
-    return LEVEL2_DEFAULT_CODIFICATION_SLOT.get(normalized, "implementation_detail")
+        return "NONE"
+    return LEVEL2_DEFAULT_SPECIFICATION_SLOT.get(normalized, "NONE")
 
 
 def infer_affected_component_from_level2(
     level2: Any,
     context_text: str = "",
 ) -> str:
-    normalized = normalize_level2(str(level2 or ""))
-    if normalized not in VALID_LEVEL2:
-        return "implementation_detail"
-
-    if normalized == "missing data/preprocessing protocol":
-        slot = infer_codification_slot_from_level2(normalized, context_text)
-        return "data" if slot == "data" else "preprocessing"
-
-    return LEVEL2_DEFAULT_AFFECTED_COMPONENT.get(normalized, "implementation_detail")
+    """Affected component uses the same vocabulary as specification slots."""
+    return infer_codification_slot_from_level2(level2, context_text)
 
 
 def assess_slot_level2_consistency(gap: Dict[str, Any]) -> Dict[str, Any]:
@@ -533,18 +507,14 @@ def assess_slot_level2_consistency(gap: Dict[str, Any]) -> Dict[str, Any]:
 
     context = gap_text_blob(gap)
     expected = infer_codification_slot_from_level2(level2, context)
-    actual = str(
+    actual_raw = str(
         gap.get("codification_slot")
         or gap.get("slot")
         or gap.get("affected_component")
         or ""
-    ).strip().lower()
-
-    if actual in {"model_architecture", "hyperparameter"}:
-        actual_mapped = infer_affected_component_from_level2(level2, context)
-        consistent = actual == actual_mapped or actual in {expected}
-    else:
-        consistent = actual == expected
+    ).strip()
+    actual = normalize_specification_slot(actual_raw)
+    consistent = actual == expected
 
     return {
         "slot_level2_consistent": consistent,

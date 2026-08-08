@@ -35,20 +35,20 @@ DEFAULT_OPENAI_MODEL = (
 
 VALID_LEVEL2_BY_LEVEL1 = {
     "Ambiguity": {
-        "ambiguous formal definition",
-        "ambiguous method behavior",
+        "Ambiguous Definition",
+        "Ambiguous Procedure",
     },
     "Incompleteness": {
-        "missing algorithmic specification",
-        "missing hyperparameter protocol",
-        "missing model architecture",
-        "missing evaluation protocol",
-        "missing data/preprocessing protocol",
+        "Missing Algorithmic Procedure",
+        "Missing Configuration Protocol",
+        "Missing Model Specification",
+        "Missing Evaluation Specification",
+        "Missing Data Specification",
     },
     "Inconsistency": {
-        "inconsistent objective or loss",
-        "inconsistent architecture or pipeline",
-        "inconsistent model specification",
+        "Conflicting Objective",
+        "Conflicting Model Design",
+        "Conflicting Formal Definition",
     },
 }
 
@@ -62,20 +62,16 @@ VALID_LEVEL1 = set(VALID_LEVEL2_BY_LEVEL1.keys())
 VALID_LEVEL2 = set(LEVEL2_TO_LEVEL1.keys())
 
 VALID_AFFECTED_COMPONENTS = {
-    "input",
-    "output",
-    "core_method",
-    "algorithm",
-    "training",
-    "evaluation",
-    "implementation_detail",
-    "model_architecture",
-    "hyperparameter",
-    "code_behavior",
-    "preprocessing",
-    "postprocessing",
-    "data",
-    "inference",
+    "TASK_AND_IO",
+    "CORE_ALGORITHM",
+    "MODEL_ARCHITECTURE",
+    "OBJECTIVE_AND_SUPERVISION",
+    "TRAINING_PROCEDURE",
+    "DATA_AND_PREPROCESSING",
+    "INFERENCE_AND_DECISION",
+    "EVALUATION_PROTOCOL",
+    "INTERNAL_CONSISTENCY",
+    "NONE",
 }
 
 VALID_SOLUTION_SOURCE_TYPES = {
@@ -231,23 +227,23 @@ Hard constraints:
 - If the original evidence is insufficient, reject or mark review_needed.
 
 Allowed Level-2 labels:
-- ambiguous formal definition
-- ambiguous method behavior
-- missing algorithmic specification
-- missing hyperparameter protocol
-- missing model architecture
-- missing evaluation protocol
-- missing data/preprocessing protocol
-- inconsistent objective or loss
-- inconsistent architecture or pipeline
-- inconsistent model specification
+- Ambiguous Definition
+- Ambiguous Procedure
+- Missing Algorithmic Procedure
+- Missing Configuration Protocol
+- Missing Model Specification
+- Missing Evaluation Specification
+- Missing Data Specification
+- Conflicting Objective
+- Conflicting Model Design
+- Conflicting Formal Definition
 
 Labeling rules:
-- Use missing evaluation protocol for metric computation, evaluation split, prompt set, threshold, sampling, seed/sample count, or evaluator configuration.
-- Use missing data/preprocessing protocol for data construction, preprocessing, segmentation, stride/windowing, filtering, label construction, tokenization, or normalization.
-- Use missing algorithmic specification for method procedure, training-loop rule, update order, loss routing, sampling rule, or termination condition.
-- Use ambiguous method behavior when the method permits multiple plausible operational behaviors.
-- Use ambiguous formal definition when a mathematical/formal variable, sign, convention, or definition is unclear.
+- Use Missing Evaluation Specification for metric computation, evaluation split, prompt set, threshold, sampling, seed/sample count, or evaluator configuration.
+- Use Missing Data Specification for data construction, preprocessing, segmentation, stride/windowing, filtering, label construction, tokenization, or normalization.
+- Use Missing Algorithmic Procedure for method procedure, training-loop rule, update order, loss routing, sampling rule, or termination condition.
+- Use Ambiguous Procedure when the method permits multiple plausible operational behaviors.
+- Use Ambiguous Definition when a mathematical/formal variable, sign, convention, or definition is unclear.
 - Use Inconsistency only when two concrete sources conflict.
 
 Return STRICT JSON only.
@@ -560,16 +556,8 @@ def assess_paper_core_gap(g: Dict[str, Any]) -> Tuple[bool, List[str]]:
         signal for signal in PAPER_PROTOCOL_SIGNALS if contains_signal(text, signal)
     ]
 
-    if affected == "code_behavior" and not paper_hits:
-        reasons.append("affected_component_code_behavior_without_paper_protocol")
-        return False, reasons
-
     if code_hits and not paper_hits:
         reasons.append(f"code_only_not_paper_spec_gap:{code_hits[0]}")
-        return False, reasons
-
-    if affected == "code_behavior" and code_hits and len(paper_hits) < 2:
-        reasons.append("code_behavior_with_repo_api_focus")
         return False, reasons
 
     return True, reasons
@@ -737,7 +725,7 @@ def add_borderline_flags(g: Dict[str, Any]) -> Dict[str, Any]:
     flags["generic_gap_quote"] = is_generic_gap_quote(g.get("gap_quote", ""))
 
     flags["needs_hparam_manual_review"] = (
-        g.get("level2") == "missing hyperparameter protocol" and bool(ordinary)
+        g.get("level2") == "Missing Configuration Protocol" and bool(ordinary)
     )
     flags["needs_generic_quote_manual_review"] = bool(flags["generic_gap_quote"])
     flags["solution_from_reproducer"] = g.get("solution_source_type") in {
@@ -1120,8 +1108,8 @@ Return STRICT JSON only:
   "final_decision": "main_resolved|review_needed|rejected",
   "decision_reason": "",
   "level1": "Ambiguity|Incompleteness|Inconsistency|null",
-  "level2": "ambiguous formal definition|ambiguous method behavior|missing algorithmic specification|missing hyperparameter protocol|missing model architecture|missing evaluation protocol|missing data/preprocessing protocol|inconsistent objective or loss|inconsistent architecture or pipeline|inconsistent model specification|null",
-  "affected_component": "input|output|core_method|algorithm|training|evaluation|implementation_detail|model_architecture|hyperparameter|code_behavior|preprocessing|postprocessing|data|inference|null",
+  "level2": "Ambiguous Definition|Ambiguous Procedure|Missing Algorithmic Procedure|Missing Configuration Protocol|Missing Model Specification|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition|null",
+  "affected_component": "TASK_AND_IO|CORE_ALGORITHM|MODEL_ARCHITECTURE|OBJECTIVE_AND_SUPERVISION|TRAINING_PROCEDURE|DATA_AND_PREPROCESSING|INFERENCE_AND_DECISION|EVALUATION_PROTOCOL|INTERNAL_CONSISTENCY|NONE|null",
   "gold_clarified_detail": "",
   "candidate_strength": "strong|borderline|weak",
   "confidence": 0.0,
@@ -1164,16 +1152,10 @@ def needs_llm_cleanup(record: Dict[str, Any], split: str, reasons: List[str]) ->
 
 
 def normalize_cleanup_level2(level2: Any) -> str:
-    label = normalize_for_match(level2)
-
+    label = str(level2 or "").strip()
     for valid in LEVEL2_TO_LEVEL1:
-        if label == valid:
+        if label.lower() == valid.lower():
             return valid
-
-    for valid in LEVEL2_TO_LEVEL1:
-        if valid in label:
-            return valid
-
     return ""
 
 
@@ -1199,7 +1181,8 @@ def apply_llm_cleanup_result(
         g["level2"] = new_level2
         g["level1"] = LEVEL2_TO_LEVEL1[new_level2]
 
-    new_affected = str(cleanup.get("affected_component") or "").strip()
+    new_affected = str(cleanup.get("affected_component") or "").strip().upper().replace(" ", "_")
+    new_affected = re.sub(r"_+", "_", new_affected)
     if new_affected in VALID_AFFECTED_COMPONENTS:
         g["affected_component"] = new_affected
 

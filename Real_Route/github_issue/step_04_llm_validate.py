@@ -98,8 +98,8 @@ Critical constraints:
 - Use only the allowed Level-2 labels from TAXONOMY_BRIEF.
 - If uncertain, prefer Ambiguity or Incompleteness over Inconsistency unless explicit contradiction evidence exists.
 - Use Inconsistency only when two concrete sources conflict, such as paper vs code, paper vs README, paper vs appendix, or two concrete implementation descriptions.
-- For evaluation metric computation, evaluation prompt sets, evaluation thresholds, evaluation split, number of evaluation samples/seeds, evaluator configuration, or protocol for reproducing reported numbers, use missing evaluation protocol when the detail is absent.
-- For input normalization, augmentation, tokenization, data filtering, data construction, label construction, segmentation, stride/windowing, or preprocessing before model input, use missing data/preprocessing protocol when the detail is absent.
+- For evaluation metric computation, evaluation prompt sets, evaluation thresholds, evaluation split, number of evaluation samples/seeds, evaluator configuration, or protocol for reproducing reported numbers, use Missing Evaluation Specification when the detail is absent.
+- For input normalization, augmentation, tokenization, data filtering, data construction, label construction, segmentation, stride/windowing, or preprocessing before model input, use Missing Data Specification when the detail is absent.
 
 Return STRICT JSON only.
 """
@@ -628,7 +628,7 @@ Return STRICT JSON only:
         "evidence_extractable": true/false
       }},
       "is_resolved": true/false,
-      "affected_component_hint": "input|output|core_method|algorithm|training|evaluation|implementation_detail|model_architecture|hyperparameter|code_behavior|preprocessing|data|postprocessing|inference|null",
+      "affected_component_hint": "TASK_AND_IO|CORE_ALGORITHM|MODEL_ARCHITECTURE|OBJECTIVE_AND_SUPERVISION|TRAINING_PROCEDURE|DATA_AND_PREPROCESSING|INFERENCE_AND_DECISION|EVALUATION_PROTOCOL|INTERNAL_CONSISTENCY|NONE|null",
       "gap_summary": "",
       "gap_quote": "",
       "solution_summary": "",
@@ -683,11 +683,11 @@ GitHub issue boundary:
 {GITHUB_TAXONOMY_BOUNDARY}
 
 Important label-selection reminders:
-- Use "missing evaluation protocol" for missing metric computation, evaluation data split, evaluation prompt set, evaluation threshold, evaluation sampling, number of evaluation seeds/samples, or evaluator configuration.
-- Use "missing data/preprocessing protocol" for missing input normalization, augmentation, tokenization, data filtering, label construction, train/validation data construction, segmentation, stride/windowing, or preprocessing before model input.
-- Use "missing algorithmic specification" for core method procedures, training-loop rules, update order, loss routing, interface operation, sampling/update rules, or termination conditions.
-- Use "missing hyperparameter protocol" only when the missing issue is how to select/tune/validate a hyperparameter, not merely a single ordinary unreported value.
-- Use "missing model architecture" for structural model choices such as activation, normalization, pooling, layer/module type, initialization, readout, dimensional mapping, or module wiring.
+- Use "Missing Evaluation Specification" for missing metric computation, evaluation data split, evaluation prompt set, evaluation threshold, evaluation sampling, number of evaluation seeds/samples, or evaluator configuration.
+- Use "Missing Data Specification" for missing input normalization, augmentation, tokenization, data filtering, label construction, train/validation data construction, segmentation, stride/windowing, or preprocessing before model input.
+- Use "Missing Algorithmic Procedure" for core method procedures, training-loop rules, update order, loss routing, interface operation, sampling/update rules, or termination conditions.
+- Use "Missing Configuration Protocol" only when the missing issue is how to select/tune/validate a hyperparameter, not merely a single ordinary unreported value.
+- Use "Missing Model Specification" for structural model choices such as activation, normalization, pooling, layer/module type, initialization, readout, dimensional mapping, or module wiring.
 - Use inconsistency labels only when two concrete sources conflict.
 
 Issue context:
@@ -728,7 +728,7 @@ def normalize_taxonomy_result(tax: Dict[str, Any], atomic_gap: Optional[Dict[str
     level2_raw = normalize_level2(str(tax.get("level2") or "").strip())
 
     if level2_raw not in VALID_LEVEL2:
-        level2_raw = "ambiguous method behavior"
+        level2_raw = "Ambiguous Procedure"
 
     level1 = LEVEL2_TO_LEVEL1.get(level2_raw, "Ambiguity")
 

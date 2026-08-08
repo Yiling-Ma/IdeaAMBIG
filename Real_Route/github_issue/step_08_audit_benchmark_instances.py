@@ -105,16 +105,16 @@ EXTERNAL_KNOWLEDGE_PATTERNS = [
 ]
 
 LEVEL2_NORMALIZED = {
-    "missing model architecture": "architecture",
-    "missing hyperparameter protocol": "hyperparameter",
-    "missing algorithmic specification": "algorithm",
-    "missing evaluation protocol": "evaluation",
-    "missing data/preprocessing protocol": "data_preprocessing",
-    "ambiguous method behavior": "method_behavior",
-    "ambiguous formal definition": "formal_definition",
-    "inconsistent objective or loss": "objective_or_loss",
-    "inconsistent architecture or pipeline": "architecture_or_pipeline",
-    "inconsistent model specification": "model_specification",
+    "Missing Model Specification": "MODEL_ARCHITECTURE",
+    "Missing Configuration Protocol": "TRAINING_PROCEDURE",
+    "Missing Algorithmic Procedure": "CORE_ALGORITHM",
+    "Missing Evaluation Specification": "EVALUATION_PROTOCOL",
+    "Missing Data Specification": "DATA_AND_PREPROCESSING",
+    "Ambiguous Procedure": "CORE_ALGORITHM",
+    "Ambiguous Definition": "CORE_ALGORITHM",
+    "Conflicting Objective": "INTERNAL_CONSISTENCY",
+    "Conflicting Model Design": "INTERNAL_CONSISTENCY",
+    "Conflicting Formal Definition": "INTERNAL_CONSISTENCY",
 }
 
 CONCRETE_GOLD_SIGNALS = [
@@ -620,34 +620,38 @@ def assess_minimal_sufficiency(instance: Dict[str, Any]) -> Dict[str, Any]:
 
 def taxonomy_bin(instance: Dict[str, Any]) -> str:
     defect = (instance.get("defects") or [{}])[0]
-    slot = str(defect.get("codification_slot") or defect.get("slot") or "").lower()
-    level1 = str(defect.get("level1") or "").lower()
-    level2 = str(defect.get("level2") or "").lower()
+    slot = str(defect.get("codification_slot") or defect.get("slot") or "").strip().upper()
+    level1 = str(defect.get("level1") or "")
+    level2 = str(defect.get("level2") or "").strip()
 
-    if "evaluation protocol" in level2 or slot == "evaluation":
-        return "evaluation"
-    if "data/preprocessing protocol" in level2 or slot in {"preprocessing", "data"}:
-        return "data_preprocessing"
-    if slot in {"implementation_detail", "model_architecture"} or "model architecture" in level2:
-        return "architecture"
-    if slot == "training" or "hyperparameter" in level2 or "objective or loss" in level2:
-        return "training"
-    if slot in {"algorithm", "core_method"} or "algorithmic specification" in level2:
-        return "algorithm"
-    if slot == "input":
-        return "input"
-    if slot == "output":
-        return "output"
-    if slot == "inference":
-        return "inference"
-    if slot == "code_behavior":
-        return "code_behavior"
-    if slot == "task":
-        return "task"
-    if "inconsistency" in level1:
-        return "inconsistency"
-    if "ambiguity" in level1:
-        return "ambiguity"
+    if level2 == "Missing Evaluation Specification" or slot == "EVALUATION_PROTOCOL":
+        return "EVALUATION_PROTOCOL"
+    if level2 == "Missing Data Specification" or slot == "DATA_AND_PREPROCESSING":
+        return "DATA_AND_PREPROCESSING"
+    if slot == "MODEL_ARCHITECTURE" or level2 == "Missing Model Specification":
+        return "MODEL_ARCHITECTURE"
+    if (
+        slot == "TRAINING_PROCEDURE"
+        or level2 == "Missing Configuration Protocol"
+        or level2 == "Conflicting Objective"
+    ):
+        return "TRAINING_PROCEDURE"
+    if slot == "CORE_ALGORITHM" or level2 in {
+        "Missing Algorithmic Procedure",
+        "Ambiguous Definition",
+        "Ambiguous Procedure",
+    }:
+        return "CORE_ALGORITHM"
+    if slot == "TASK_AND_IO":
+        return "TASK_AND_IO"
+    if slot == "INFERENCE_AND_DECISION":
+        return "INFERENCE_AND_DECISION"
+    if slot == "OBJECTIVE_AND_SUPERVISION":
+        return "OBJECTIVE_AND_SUPERVISION"
+    if slot == "INTERNAL_CONSISTENCY" or level1 == "Inconsistency":
+        return "INTERNAL_CONSISTENCY"
+    if level1 == "Ambiguity":
+        return "Ambiguity"
     return "other"
 
 
@@ -848,16 +852,20 @@ def assess_schema(instance: Dict[str, Any]) -> Dict[str, Any]:
 
 def assess_resolution_role(instance: Dict[str, Any]) -> Dict[str, Any]:
     defect = (instance.get("defects") or [{}])[0]
-    slot = str(defect.get("codification_slot") or "")
+    slot = str(defect.get("codification_slot") or "").strip().upper()
     role = str(defect.get("resolution_role") or "")
-    level2 = str(defect.get("level2") or "").lower()
+    level2 = str(defect.get("level2") or "").strip()
 
-    reproducibility_slots = {"evaluation", "preprocessing", "data"}
-    reproducibility_level2 = (
-        "evaluation protocol" in level2
-        or "data/preprocessing protocol" in level2
-        or "hyperparameter" in level2
-    )
+    reproducibility_slots = {
+        "EVALUATION_PROTOCOL",
+        "DATA_AND_PREPROCESSING",
+        "TRAINING_PROCEDURE",
+    }
+    reproducibility_level2 = level2 in {
+        "Missing Evaluation Specification",
+        "Missing Data Specification",
+        "Missing Configuration Protocol",
+    }
     wrong_role = (
         role == "implementation_blocker"
         and (slot in reproducibility_slots or reproducibility_level2)

@@ -16,16 +16,16 @@ from openai import OpenAI
 # ============================================================
 
 LEVEL2_TO_LEVEL1 = {
-    "ambiguous formal definition": "Ambiguity",
-    "ambiguous method behavior": "Ambiguity",
-    "missing algorithmic specification": "Incompleteness",
-    "missing hyperparameter protocol": "Incompleteness",
-    "missing model architecture": "Incompleteness",
-    "missing evaluation protocol": "Incompleteness",
-    "missing data/preprocessing protocol": "Incompleteness",
-    "inconsistent objective or loss": "Inconsistency",
-    "inconsistent architecture or pipeline": "Inconsistency",
-    "inconsistent model specification": "Inconsistency",
+    "Ambiguous Definition": "Ambiguity",
+    "Ambiguous Procedure": "Ambiguity",
+    "Missing Algorithmic Procedure": "Incompleteness",
+    "Missing Configuration Protocol": "Incompleteness",
+    "Missing Model Specification": "Incompleteness",
+    "Missing Evaluation Specification": "Incompleteness",
+    "Missing Data Specification": "Incompleteness",
+    "Conflicting Objective": "Inconsistency",
+    "Conflicting Model Design": "Inconsistency",
+    "Conflicting Formal Definition": "Inconsistency",
 }
 
 LEVEL1_LABELS = {
@@ -50,18 +50,16 @@ RESOLUTION_ROLE_LABELS = {
 }
 
 CODIFICATION_SLOT_LABELS = {
-    "task",
-    "input",
-    "output",
-    "core_method",
-    "algorithm",
-    "training",
-    "evaluation",
-    "implementation_detail",
-    "code_behavior",
-    "preprocessing",
-    "data",
-    "inference",
+    "TASK_AND_IO",
+    "CORE_ALGORITHM",
+    "MODEL_ARCHITECTURE",
+    "OBJECTIVE_AND_SUPERVISION",
+    "TRAINING_PROCEDURE",
+    "DATA_AND_PREPROCESSING",
+    "INFERENCE_AND_DECISION",
+    "EVALUATION_PROTOCOL",
+    "INTERNAL_CONSISTENCY",
+    "NONE",
 }
 
 ACTION_TYPE_LABELS = {
@@ -70,34 +68,18 @@ ACTION_TYPE_LABELS = {
     "experiment_selection",
 }
 
-AFFECTED_COMPONENT_TO_SLOT = {
-    "input": "input",
-    "output": "output",
-    "core_method": "core_method",
-    "algorithm": "algorithm",
-    "training": "training",
-    "evaluation": "evaluation",
-    "implementation_detail": "implementation_detail",
-    "model_architecture": "core_method",
-    "hyperparameter": "training",
-    "code_behavior": "code_behavior",
-    "preprocessing": "preprocessing",
-    "data": "data",
-    "inference": "inference",
-    "postprocessing": "output",
-}
 
 LEVEL2_TO_CODIFICATION_SLOT = {
-    "ambiguous formal definition": "core_method",
-    "ambiguous method behavior": "core_method",
-    "missing algorithmic specification": "algorithm",
-    "missing hyperparameter protocol": "training",
-    "missing model architecture": "core_method",
-    "missing evaluation protocol": "evaluation",
-    "missing data/preprocessing protocol": "preprocessing",
-    "inconsistent objective or loss": "training",
-    "inconsistent architecture or pipeline": "core_method",
-    "inconsistent model specification": "core_method",
+    "Ambiguous Definition": "CORE_ALGORITHM",
+    "Ambiguous Procedure": "CORE_ALGORITHM",
+    "Missing Algorithmic Procedure": "CORE_ALGORITHM",
+    "Missing Model Specification": "MODEL_ARCHITECTURE",
+    "Missing Data Specification": "DATA_AND_PREPROCESSING",
+    "Missing Configuration Protocol": "TRAINING_PROCEDURE",
+    "Missing Evaluation Specification": "EVALUATION_PROTOCOL",
+    "Conflicting Objective": "INTERNAL_CONSISTENCY",
+    "Conflicting Model Design": "INTERNAL_CONSISTENCY",
+    "Conflicting Formal Definition": "INTERNAL_CONSISTENCY",
 }
 
 
@@ -313,127 +295,56 @@ def call_llm(
 # ============================================================
 
 def normalize_level2_label(raw: Any) -> str:
-    raw = str(raw or "").strip().lower()
-    aliases = {
-        "missing algorithm": "missing algorithmic specification",
-        "missing algorithmic detail": "missing algorithmic specification",
-        "missing architecture": "missing model architecture",
-        "missing model specification": "missing model architecture",
-        "missing evaluation": "missing evaluation protocol",
-        "missing metric protocol": "missing evaluation protocol",
-        "missing evaluation metric protocol": "missing evaluation protocol",
-        "missing data protocol": "missing data/preprocessing protocol",
-        "missing preprocessing protocol": "missing data/preprocessing protocol",
-        "missing data construction protocol": "missing data/preprocessing protocol",
-        "missing data preprocessing protocol": "missing data/preprocessing protocol",
-        "inconsistent loss": "inconsistent objective or loss",
-        "inconsistent objective": "inconsistent objective or loss",
-        "inconsistent pipeline": "inconsistent architecture or pipeline",
-        "inconsistent architecture": "inconsistent architecture or pipeline",
-        "inconsistent model": "inconsistent model specification",
-    }
-    if raw in aliases:
-        return aliases[raw]
-    if raw in LEVEL2_LABELS:
-        return raw
+    text = str(raw or "").strip()
     for label in LEVEL2_LABELS:
-        if label in raw:
+        if text.lower() == label.lower():
             return label
-    return raw
+    return text
 
 
 def normalize_codification_slot(raw: str) -> str:
-    raw = str(raw or "").strip().lower()
-
-    if raw in CODIFICATION_SLOT_LABELS:
-        return raw
-
-    mapping = {
-        "inputs": "input",
-        "outputs": "output",
-        "model_architecture": "core_method",
-        "hyperparameter": "training",
-        "preprocessing": "preprocessing",
-        "data_preprocessing": "preprocessing",
-        "postprocessing": "output",
-        "implementation": "implementation_detail",
-        "architecture": "core_method",
-    }
-
-    if raw in mapping:
-        return mapping[raw]
-
-    if "architecture" in raw or "layer" in raw:
-        return "core_method"
-    if "hyper" in raw:
-        return "training"
-    if "impl" in raw:
-        return "implementation_detail"
-    if "train" in raw or "optim" in raw:
-        return "training"
-    if "eval" in raw or "metric" in raw:
-        return "evaluation"
-    if "preprocess" in raw:
-        return "preprocessing"
-    if "input" in raw:
-        return "input"
-    if "data" in raw:
-        return "data"
-    if "output" in raw or "postprocess" in raw:
-        return "output"
-    if "code" in raw:
-        return "code_behavior"
-    if "algorithm" in raw or "procedure" in raw:
-        return "algorithm"
-    if "method" in raw:
-        return "core_method"
-
-    return "implementation_detail"
+    text = str(raw or "").strip().upper().replace(" ", "_").replace("-", "_")
+    text = re.sub(r"_+", "_", text)
+    if text in CODIFICATION_SLOT_LABELS:
+        return text
+    return "NONE"
 
 
 def infer_codification_slot(gap: Dict[str, Any]) -> str:
     level2 = normalize_level2_label(gap.get("level2", ""))
-    if level2 == "missing data/preprocessing protocol":
-        text = " ".join(
-            str(gap.get(k, ""))
-            for k in (
-                "gap_summary",
-                "solution_summary",
-                "gold_clarified_detail",
-                "why_this_blocks_or_affects_codification",
-            )
-        ).lower()
-        if any(k in text for k in ["data construction", "dataset", "label", "filter"]):
-            return "data"
-        return "preprocessing"
-
     if level2 in LEVEL2_TO_CODIFICATION_SLOT:
         return LEVEL2_TO_CODIFICATION_SLOT[level2]
 
-    affected = str(gap.get("affected_component", "")).strip()
-    if affected in AFFECTED_COMPONENT_TO_SLOT:
-        return AFFECTED_COMPONENT_TO_SLOT[affected]
-    return normalize_codification_slot(affected)
+    affected = normalize_codification_slot(str(gap.get("affected_component", "")).strip())
+    if affected in CODIFICATION_SLOT_LABELS:
+        return affected
+    return "NONE"
 
 
 def infer_granularity(gap: Dict[str, Any]) -> str:
     level2 = normalize_level2_label(gap.get("level2", ""))
-    affected = str(gap.get("affected_component", "")).lower()
+    affected = normalize_codification_slot(str(gap.get("affected_component", "")))
     text = " ".join([
         str(gap.get("gap_summary", "")),
         str(gap.get("gold_clarified_detail", "")),
     ]).lower()
 
-    if "hyperparameter" in level2:
+    if level2 == "Missing Configuration Protocol":
         return "fine"
 
-    if affected in {"hyperparameter", "implementation_detail", "code_behavior"}:
+    if affected in {"TRAINING_PROCEDURE", "NONE"}:
         return "fine"
 
     if any(k in text for k in ["learning rate", "batch size", "epoch", "threshold", "k=", "k =", "lambda"]):
         return "fine"
 
-    if affected in {"input", "output", "core_method", "preprocessing", "data", "inference"}:
+    if affected in {
+        "TASK_AND_IO",
+        "CORE_ALGORITHM",
+        "DATA_AND_PREPROCESSING",
+        "INFERENCE_AND_DECISION",
+        "MODEL_ARCHITECTURE",
+    }:
         return "medium"
 
     return "medium"
@@ -442,13 +353,13 @@ def infer_granularity(gap: Dict[str, Any]) -> str:
 def infer_resolution_role(gap: Dict[str, Any], granularity: str) -> str:
     level2 = normalize_level2_label(gap.get("level2", ""))
 
-    if level2.startswith("inconsistent"):
+    if level2.startswith("Conflicting"):
         return "inconsistency_to_resolve"
 
-    if "evaluation protocol" in level2 or "data/preprocessing protocol" in level2:
+    if level2 in {"Missing Evaluation Specification", "Missing Data Specification"}:
         return "reproducibility_detail"
 
-    if granularity == "fine" or "hyperparameter" in level2:
+    if granularity == "fine" or level2 == "Missing Configuration Protocol":
         return "reproducibility_detail"
 
     return "implementation_blocker"
@@ -771,10 +682,10 @@ Important constraints:
 
 Allowed labels:
 Level-1 = Ambiguity | Incompleteness | Inconsistency
-Level-2 = ambiguous formal definition | ambiguous method behavior | missing algorithmic specification | missing hyperparameter protocol | missing model architecture | missing evaluation protocol | missing data/preprocessing protocol | inconsistent objective or loss | inconsistent architecture or pipeline | inconsistent model specification
+Level-2 = Ambiguous Definition | Ambiguous Procedure | Missing Algorithmic Procedure | Missing Configuration Protocol | Missing Model Specification | Missing Evaluation Specification | Missing Data Specification | Conflicting Objective | Conflicting Model Design | Conflicting Formal Definition
 Granularity = coarse | medium | fine
 Resolution role = implementation_blocker | open_design_choice | reproducibility_detail | inconsistency_to_resolve
-Codification slot = task | input | output | core_method | algorithm | training | evaluation | implementation_detail | code_behavior | preprocessing | data | inference
+Codification slot = TASK_AND_IO | CORE_ALGORITHM | MODEL_ARCHITECTURE | OBJECTIVE_AND_SUPERVISION | TRAINING_PROCEDURE | DATA_AND_PREPROCESSING | INFERENCE_AND_DECISION | EVALUATION_PROTOCOL | INTERNAL_CONSISTENCY | NONE
 Action type = clarification_question | evidence_seeking | experiment_selection
 
 Fixed defect to use:
@@ -945,7 +856,7 @@ def force_single_clarification_action(
 def normalize_actions(instance: Dict[str, Any]) -> Dict[str, Any]:
     defects = instance.get("defects", [])
     defect = defects[0] if isinstance(defects, list) and defects else {}
-    codification_slot = defect.get("codification_slot", "implementation_detail")
+    codification_slot = defect.get("codification_slot", "NONE")
 
     actions = instance.get("expected_clarification_actions", [])
     if not isinstance(actions, list):

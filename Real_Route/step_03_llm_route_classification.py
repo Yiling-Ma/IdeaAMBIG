@@ -159,46 +159,45 @@ Use this compact taxonomy for implementation-relevant method-core specification 
 
 Level-1: Ambiguity
 
-1. ambiguous formal definition
-A symbol, notation, mathematical object, or formal rule is underspecified, leaving multiple plausible interpretations. The ambiguity changes what an implementer would compute or instantiate.
+1. Ambiguous Definition
+A formal element, such as a symbol, notation, mathematical object, or rule, is described without a sufficiently precise meaning. Multiple plausible interpretations remain, leading implementers to compute or instantiate different objects.
 
-2. ambiguous method behavior
-A method component, training procedure, inference rule, or evaluation behavior is described but its operational behavior is unclear. Multiple plausible implementations are possible and may lead to different results.
+2. Ambiguous Procedure
+A method operation, execution rule, inference behavior, or interaction between components is described but its operational procedure is unclear. Different implementations may follow different behaviors and produce different outcomes.
 
 Level-1: Incompleteness
 
-3. missing algorithmic specification
-A core algorithmic step, interface, update rule, routing decision, or procedural detail is omitted. Without this detail, the method cannot be faithfully implemented.
+3. Missing Algorithmic Procedure
+A required operational step, algorithmic rule, update mechanism, decision criterion, or execution procedure is omitted. Without this information, an implementer cannot faithfully reproduce how the method operates.
 
-4. missing hyperparameter protocol
-A result-sensitive hyperparameter is introduced, but the paper does not specify how its value is chosen, tuned, or validated. The issue is the missing selection protocol rather than a single ordinary unreported value.
+4. Missing Configuration Protocol
+A result-sensitive configuration choice is introduced, but the specification does not describe how the choice should be determined. Missing information concerns the selection, tuning, or validation procedure for important settings, rather than merely an omitted value.
 
-5. missing model architecture
-The paper states that a model or module is used but omits structural details such as layer type, normalization, pooling, activation, initialization, or dimensional mapping. These omissions materially affect the implemented model.
+5. Missing Model Specification
+A model or computational component is mentioned, but its structural configuration is insufficiently specified. Missing details may include layer composition, module organization, dimensional mapping, normalization, activation, or parameterization choices.
 
-6. missing evaluation protocol
-The evaluation setup is incomplete, including missing metric computation rules, evaluation data splits, prompt sets, thresholds, sampling procedures, or evaluation model configuration. The omission prevents faithful reproduction of reported results.
+6. Missing Evaluation Specification
+The evaluation procedure is incompletely described, including missing metric definitions, evaluation protocols, data splits, sampling procedures, prompts, thresholds, or evaluation configurations.
 
-7. missing data/preprocessing protocol
-The data construction, filtering, labeling, augmentation, normalization, tokenization, segmentation, or input transformation procedure is not fully specified. As a result, implementers may construct different inputs or supervision signals.
+7. Missing Data Specification
+The construction or transformation of input data is incompletely described. Missing details may include data filtering, labeling, augmentation, normalization, tokenization, segmentation, or other preprocessing steps.
 
 Level-1: Inconsistency
 
-8. inconsistent objective or loss
-The paper and another source, such as code or an appendix, specify different training objectives, loss terms, reward definitions, or optimization targets. Following each source would optimize a materially different objective.
+8. Conflicting Objective
+The specification and another source define different objectives, loss functions, reward signals, or optimization targets.
 
-9. inconsistent architecture or pipeline
-The paper and another source specify different model architectures, module configurations, data pipelines, preprocessing steps, or training/evaluation pipelines. The inconsistency makes it unclear which version should be followed.
+9. Conflicting Model Design
+Different sources specify incompatible model components, architectures, preprocessing pipelines, or execution pipelines.
 
-10. inconsistent model specification
-Two sources specify conflicting formal model assumptions, such as distributions, conditioning sets, aggregation rules, sampling support, or probabilistic/inference definitions. The discrepancy changes the underlying model being implemented.
+10. Conflicting Formal Definition
+Different sources provide incompatible formal assumptions or mathematical definitions.
 
 Boundary rules:
 - Do not count ordinary missing values such as batch size or learning rate unless the missing value or selection protocol materially blocks implementation or changes the method.
 - Do not count GPU, compute, memory, package installation, training time, dataset access, licensing, or random seed variation as sufficient by themselves.
 - Do not count pure performance mismatch unless the report links it to a concrete method-core specification gap.
 - Do not count "hard to reproduce" unless the report identifies a specific method-core specification problem.
-- If the term "reproducing" means "reproducing kernel Hilbert space" or another technical phrase unrelated to reproducibility, classify the record as not a reproduction report.
 """
 
 
@@ -216,30 +215,30 @@ VALID_LEVEL1 = {
 }
 
 VALID_LEVEL2 = {
-    "ambiguous formal definition",
-    "ambiguous method behavior",
-    "missing algorithmic specification",
-    "missing hyperparameter protocol",
-    "missing model architecture",
-    "missing evaluation protocol",
-    "missing data/preprocessing protocol",
-    "inconsistent objective or loss",
-    "inconsistent architecture or pipeline",
-    "inconsistent model specification",
+    "Ambiguous Definition",
+    "Ambiguous Procedure",
+    "Missing Algorithmic Procedure",
+    "Missing Configuration Protocol",
+    "Missing Model Specification",
+    "Missing Evaluation Specification",
+    "Missing Data Specification",
+    "Conflicting Objective",
+    "Conflicting Model Design",
+    "Conflicting Formal Definition",
     "none",
 }
 
 LEVEL2_TO_LEVEL1 = {
-    "ambiguous formal definition": "Ambiguity",
-    "ambiguous method behavior": "Ambiguity",
-    "missing algorithmic specification": "Incompleteness",
-    "missing hyperparameter protocol": "Incompleteness",
-    "missing model architecture": "Incompleteness",
-    "missing evaluation protocol": "Incompleteness",
-    "missing data/preprocessing protocol": "Incompleteness",
-    "inconsistent objective or loss": "Inconsistency",
-    "inconsistent architecture or pipeline": "Inconsistency",
-    "inconsistent model specification": "Inconsistency",
+    "Ambiguous Definition": "Ambiguity",
+    "Ambiguous Procedure": "Ambiguity",
+    "Missing Algorithmic Procedure": "Incompleteness",
+    "Missing Configuration Protocol": "Incompleteness",
+    "Missing Model Specification": "Incompleteness",
+    "Missing Evaluation Specification": "Incompleteness",
+    "Missing Data Specification": "Incompleteness",
+    "Conflicting Objective": "Inconsistency",
+    "Conflicting Model Design": "Inconsistency",
+    "Conflicting Formal Definition": "Inconsistency",
 }
 
 
@@ -376,7 +375,7 @@ Return JSON only with this exact schema:
       "is_method_core_spec_gap": true/false,
       "gold_clarified_spec_extractable": true/false,
       "level1_candidate": "Ambiguity|Incompleteness|Inconsistency|none",
-      "level2_candidate": "ambiguous formal definition|ambiguous method behavior|missing algorithmic specification|missing hyperparameter protocol|missing model architecture|missing evaluation protocol|missing data/preprocessing protocol|inconsistent objective or loss|inconsistent architecture or pipeline|inconsistent model specification|none",
+      "level2_candidate": "Ambiguous Definition|Ambiguous Procedure|Missing Algorithmic Procedure|Missing Configuration Protocol|Missing Model Specification|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition|none",
       "taxonomy_reason": ""
     }},
     "evidence_snippets": [
@@ -530,7 +529,7 @@ def normalize_route_output(obj: Dict[str, Any], metadata_obj: Dict[str, Any]) ->
         if taxonomy_out["level1_candidate"] == "none":
             taxonomy_out["level1_candidate"] = "Incompleteness"
         if taxonomy_out["level2_candidate"] == "none":
-            taxonomy_out["level2_candidate"] = "missing algorithmic specification"
+            taxonomy_out["level2_candidate"] = "Missing Algorithmic Procedure"
 
     elif primary == "synthetic_controlled":
         taxonomy_out["is_spec_gap"] = False
