@@ -13,21 +13,24 @@ contains 660 evidence-grounded, single-defect instances (163 real-world +
 specification with a `READY` counterpart, a labeled target defect, and a gold
 clarification action.
 
-This repository contains the **public construction and evaluation code**. It
-does not include the released dataset, cached LLM outputs, PDFs, or other
-large intermediate artifacts — see each subdirectory's `.gitignore`.
+This repository contains the **public construction code, evaluation code, and
+the released benchmark dataset**. It does not include cached LLM outputs,
+PDFs, or other large intermediate construction artifacts — see each
+subdirectory's `.gitignore`.
 
 ## Repository layout
 
 ```
 ARR_codes/
-├── Real_Route/        Real-world gap construction (GitHub issues + reproducibility reports) → 163 instances
+├── Data/               The 660 released benchmark instances (163 real-world + 497 controlled synthetic)
+├── Real_Route/          Real-world gap construction (GitHub issues + reproducibility reports) → 163 instances
 ├── Syn_Route/          Controlled synthetic-defect construction → 497 instances
 └── Evaluation/         Task 1/2/3 evaluation pipeline (prompting, judging, scoring)
 ```
 
 Each subdirectory has its own README with step-by-step usage:
 
+- [`Data/README.md`](Data/README.md) — the released benchmark files and their schema.
 - [`Real_Route/README.md`](Real_Route/README.md) — real-world instance
   construction from GitHub issues and reproducibility reports.
 - [`Syn_Route/README.md`](Syn_Route/README.md) — controlled synthetic-defect
