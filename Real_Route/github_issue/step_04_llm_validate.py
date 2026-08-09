@@ -685,9 +685,9 @@ GitHub issue boundary:
 Important label-selection reminders:
 - Use "Missing Evaluation Specification" for missing metric computation, evaluation data split, evaluation prompt set, evaluation threshold, evaluation sampling, number of evaluation seeds/samples, or evaluator configuration.
 - Use "Missing Data Specification" for missing input normalization, augmentation, tokenization, data filtering, label construction, train/validation data construction, segmentation, stride/windowing, or preprocessing before model input.
-- Use "Missing Algorithmic Procedure" for core method procedures, training-loop rules, update order, loss routing, interface operation, sampling/update rules, or termination conditions.
+- Use "Missing Method Procedure" for core method procedures, training-loop rules, update order, loss routing, interface operation, sampling/update rules, or termination conditions.
 - Use "Missing Configuration Protocol" only when the missing issue is how to select/tune/validate a hyperparameter, not merely a single ordinary unreported value.
-- Use "Missing Model Specification" for structural model choices such as activation, normalization, pooling, layer/module type, initialization, readout, dimensional mapping, or module wiring.
+- Use "Missing Model Structure" for structural model choices such as activation, normalization, pooling, layer/module type, initialization, readout, dimensional mapping, or module wiring.
 - Use inconsistency labels only when two concrete sources conflict.
 
 Issue context:

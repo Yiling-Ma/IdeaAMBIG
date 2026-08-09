@@ -18,9 +18,9 @@ from openai import OpenAI
 LEVEL2_TO_LEVEL1 = {
     "Ambiguous Definition": "Ambiguity",
     "Ambiguous Procedure": "Ambiguity",
-    "Missing Algorithmic Procedure": "Incompleteness",
+    "Missing Method Procedure": "Incompleteness",
     "Missing Configuration Protocol": "Incompleteness",
-    "Missing Model Specification": "Incompleteness",
+    "Missing Model Structure": "Incompleteness",
     "Missing Evaluation Specification": "Incompleteness",
     "Missing Data Specification": "Incompleteness",
     "Conflicting Objective": "Inconsistency",
@@ -72,8 +72,8 @@ ACTION_TYPE_LABELS = {
 LEVEL2_TO_CODIFICATION_SLOT = {
     "Ambiguous Definition": "CORE_ALGORITHM",
     "Ambiguous Procedure": "CORE_ALGORITHM",
-    "Missing Algorithmic Procedure": "CORE_ALGORITHM",
-    "Missing Model Specification": "MODEL_ARCHITECTURE",
+    "Missing Method Procedure": "CORE_ALGORITHM",
+    "Missing Model Structure": "MODEL_ARCHITECTURE",
     "Missing Data Specification": "DATA_AND_PREPROCESSING",
     "Missing Configuration Protocol": "TRAINING_PROCEDURE",
     "Missing Evaluation Specification": "EVALUATION_PROTOCOL",
@@ -682,7 +682,7 @@ Important constraints:
 
 Allowed labels:
 Level-1 = Ambiguity | Incompleteness | Inconsistency
-Level-2 = Ambiguous Definition | Ambiguous Procedure | Missing Algorithmic Procedure | Missing Configuration Protocol | Missing Model Specification | Missing Evaluation Specification | Missing Data Specification | Conflicting Objective | Conflicting Model Design | Conflicting Formal Definition
+Level-2 = Ambiguous Definition | Ambiguous Procedure | Missing Method Procedure | Missing Configuration Protocol | Missing Model Structure | Missing Evaluation Specification | Missing Data Specification | Conflicting Objective | Conflicting Model Design | Conflicting Formal Definition
 Granularity = coarse | medium | fine
 Resolution role = implementation_blocker | open_design_choice | reproducibility_detail | inconsistency_to_resolve
 Codification slot = TASK_AND_IO | CORE_ALGORITHM | MODEL_ARCHITECTURE | OBJECTIVE_AND_SUPERVISION | TRAINING_PROCEDURE | DATA_AND_PREPROCESSING | INFERENCE_AND_DECISION | EVALUATION_PROTOCOL | INTERNAL_CONSISTENCY | NONE

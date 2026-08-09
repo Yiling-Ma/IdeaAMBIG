@@ -105,9 +105,9 @@ EXTERNAL_KNOWLEDGE_PATTERNS = [
 ]
 
 LEVEL2_NORMALIZED = {
-    "Missing Model Specification": "MODEL_ARCHITECTURE",
+    "Missing Model Structure": "MODEL_ARCHITECTURE",
     "Missing Configuration Protocol": "TRAINING_PROCEDURE",
-    "Missing Algorithmic Procedure": "CORE_ALGORITHM",
+    "Missing Method Procedure": "CORE_ALGORITHM",
     "Missing Evaluation Specification": "EVALUATION_PROTOCOL",
     "Missing Data Specification": "DATA_AND_PREPROCESSING",
     "Ambiguous Procedure": "CORE_ALGORITHM",
@@ -628,7 +628,7 @@ def taxonomy_bin(instance: Dict[str, Any]) -> str:
         return "EVALUATION_PROTOCOL"
     if level2 == "Missing Data Specification" or slot == "DATA_AND_PREPROCESSING":
         return "DATA_AND_PREPROCESSING"
-    if slot == "MODEL_ARCHITECTURE" or level2 == "Missing Model Specification":
+    if slot == "MODEL_ARCHITECTURE" or level2 == "Missing Model Structure":
         return "MODEL_ARCHITECTURE"
     if (
         slot == "TRAINING_PROCEDURE"
@@ -637,7 +637,7 @@ def taxonomy_bin(instance: Dict[str, Any]) -> str:
     ):
         return "TRAINING_PROCEDURE"
     if slot == "CORE_ALGORITHM" or level2 in {
-        "Missing Algorithmic Procedure",
+        "Missing Method Procedure",
         "Ambiguous Definition",
         "Ambiguous Procedure",
     }:

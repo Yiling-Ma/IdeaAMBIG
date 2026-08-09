@@ -10,9 +10,9 @@ LEVEL2_TO_LEVEL1: Dict[str, str] = {
     "Ambiguous Procedure": "Ambiguity",
 
     # Incompleteness
-    "Missing Algorithmic Procedure": "Incompleteness",
+    "Missing Method Procedure": "Incompleteness",
     "Missing Configuration Protocol": "Incompleteness",
-    "Missing Model Specification": "Incompleteness",
+    "Missing Model Structure": "Incompleteness",
     "Missing Evaluation Specification": "Incompleteness",
     "Missing Data Specification": "Incompleteness",
 
@@ -54,7 +54,7 @@ Ambiguity
    implementations may follow different behaviors and produce different outcomes.
 
 Incompleteness
-3. Missing Algorithmic Procedure
+3. Missing Method Procedure
    A required operational step, algorithmic rule, update mechanism, decision
    criterion, or execution procedure is omitted. Without this information, an
    implementer cannot faithfully reproduce how the method operates.
@@ -66,7 +66,7 @@ Incompleteness
    hyperparameters, thresholds, initialization choices, or sampling parameters),
    rather than merely an omitted value.
 
-5. Missing Model Specification
+5. Missing Model Structure
    A model or computational component is mentioned, but its structural configuration
    is insufficiently specified. Missing details may include layer composition,
    module organization, dimensional mapping, normalization, activation, or
@@ -162,7 +162,7 @@ Ambiguity vs. Incompleteness:
   operational interpretations.
 - Use Incompleteness when a necessary detail is simply absent.
 
-Missing Algorithmic Procedure:
+Missing Method Procedure:
 - Use for training-loop rules, update order, loss routing, interface operation,
   sampling/update rules, termination criteria, or algorithmic bookkeeping.
 - Do not use it as a catch-all if the missing detail is clearly evaluation, data,
@@ -173,9 +173,9 @@ Missing Configuration Protocol:
 - Do not use for a single ordinary unreported value unless the selection rule is
   itself the blocker.
 - If a parameter controls a procedure or schedule, and the procedure is the blocker,
-  prefer Missing Algorithmic Procedure.
+  prefer Missing Method Procedure.
 
-Missing Model Specification:
+Missing Model Structure:
 - Use for missing structural model choices: activation, normalization, pooling,
   layer/module type, initialization, readout, dimensional mapping, or module wiring.
 
@@ -406,19 +406,19 @@ def apply_taxonomy_correction(
             "input transformation", "rasterize", "rasterization",
         ]
 
-        if normalized_level2 == "Missing Algorithmic Procedure":
+        if normalized_level2 == "Missing Method Procedure":
             if any(cue in text for cue in evaluation_cues):
                 normalized_level2 = "Missing Evaluation Specification"
                 corrected = True
                 correction_reason = (
-                    "corrected Missing Algorithmic Procedure to Missing Evaluation "
+                    "corrected Missing Method Procedure to Missing Evaluation "
                     "Specification based on explicit evaluation/metric cues"
                 )
             elif any(cue in text for cue in data_preprocess_cues):
                 normalized_level2 = "Missing Data Specification"
                 corrected = True
                 correction_reason = (
-                    "corrected Missing Algorithmic Procedure to Missing Data "
+                    "corrected Missing Method Procedure to Missing Data "
                     "Specification based on explicit data/preprocessing cues"
                 )
 
@@ -438,8 +438,8 @@ def apply_taxonomy_correction(
 LEVEL2_DEFAULT_SPECIFICATION_SLOT: Dict[str, str] = {
     "Ambiguous Definition": "CORE_ALGORITHM",
     "Ambiguous Procedure": "CORE_ALGORITHM",
-    "Missing Algorithmic Procedure": "CORE_ALGORITHM",
-    "Missing Model Specification": "MODEL_ARCHITECTURE",
+    "Missing Method Procedure": "CORE_ALGORITHM",
+    "Missing Model Structure": "MODEL_ARCHITECTURE",
     "Missing Data Specification": "DATA_AND_PREPROCESSING",
     "Missing Configuration Protocol": "TRAINING_PROCEDURE",
     "Missing Evaluation Specification": "EVALUATION_PROTOCOL",

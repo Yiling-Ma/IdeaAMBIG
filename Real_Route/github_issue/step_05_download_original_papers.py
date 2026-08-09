@@ -48,9 +48,9 @@ VALID_LEVEL2_BY_LEVEL1 = {
         "Ambiguous Procedure",
     },
     "Incompleteness": {
-        "Missing Algorithmic Procedure",
+        "Missing Method Procedure",
         "Missing Configuration Protocol",
-        "Missing Model Specification",
+        "Missing Model Structure",
         "Missing Evaluation Specification",
         "Missing Data Specification",
     },
@@ -134,9 +134,9 @@ Ambiguity:
 - Ambiguous Procedure
 
 Incompleteness:
-- Missing Algorithmic Procedure
+- Missing Method Procedure
 - Missing Configuration Protocol
-- Missing Model Specification
+- Missing Model Structure
 - Missing Evaluation Specification
 - Missing Data Specification
 
@@ -148,9 +148,9 @@ Inconsistency:
 Labeling rules:
 - Use "Missing Evaluation Specification" for missing metric computation, evaluation data split, evaluation prompt set, evaluation threshold, evaluation sampling, number of evaluation seeds/samples, or evaluator configuration.
 - Use "Missing Data Specification" for missing input normalization, augmentation, tokenization, data filtering, label construction, train/validation data construction, segmentation, stride/windowing, or preprocessing before model input.
-- Use "Missing Algorithmic Procedure" for missing core method procedure, training-loop rule, update order, loss routing, sampling/update rule, or termination condition.
+- Use "Missing Method Procedure" for missing core method procedure, training-loop rule, update order, loss routing, sampling/update rule, or termination condition.
 - Use "Missing Configuration Protocol" only when the missing issue is how to select/tune/validate a hyperparameter, not merely a single ordinary unreported value.
-- Use "Missing Model Specification" for structural model choices such as activation, normalization, pooling, layer/module type, initialization, readout, dimensional mapping, or module wiring.
+- Use "Missing Model Structure" for structural model choices such as activation, normalization, pooling, layer/module type, initialization, readout, dimensional mapping, or module wiring.
 - Use Inconsistency only when two concrete sources conflict, such as paper vs code, paper vs README, paper vs appendix, or two concrete implementation descriptions.
 - If uncertain, prefer Ambiguity or Incompleteness over Inconsistency unless explicit contradiction evidence exists.
 
@@ -382,7 +382,7 @@ Return STRICT JSON:
   }},
   "rejection_reason": "insufficient_evidence|not_real_spec_gap|not_resolved|not_method_core|implementation_bug_not_spec_gap|repo_usage_not_method_spec_gap|tuning_or_best_practice_advice|other|null",
   "level1": "Ambiguity|Incompleteness|Inconsistency|null",
-  "level2": "Ambiguous Definition|Ambiguous Procedure|Missing Algorithmic Procedure|Missing Configuration Protocol|Missing Model Specification|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition|null",
+  "level2": "Ambiguous Definition|Ambiguous Procedure|Missing Method Procedure|Missing Configuration Protocol|Missing Model Structure|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition|null",
   "affected_component": "TASK_AND_IO|CORE_ALGORITHM|MODEL_ARCHITECTURE|OBJECTIVE_AND_SUPERVISION|TRAINING_PROCEDURE|DATA_AND_PREPROCESSING|INFERENCE_AND_DECISION|EVALUATION_PROTOCOL|INTERNAL_CONSISTENCY|NONE|null",
   "solution_source_type": "author_clarification|maintainer_clarification|code_derived|reproducer_assumption|reproducer_workaround|null",
   "resolution_role_hint": "implementation_blocker|reproducibility_detail|open_design_choice|inconsistency_to_resolve|null",

@@ -39,9 +39,9 @@ VALID_LEVEL2_BY_LEVEL1 = {
         "Ambiguous Procedure",
     },
     "Incompleteness": {
-        "Missing Algorithmic Procedure",
+        "Missing Method Procedure",
         "Missing Configuration Protocol",
-        "Missing Model Specification",
+        "Missing Model Structure",
         "Missing Evaluation Specification",
         "Missing Data Specification",
     },
@@ -229,9 +229,9 @@ Hard constraints:
 Allowed Level-2 labels:
 - Ambiguous Definition
 - Ambiguous Procedure
-- Missing Algorithmic Procedure
+- Missing Method Procedure
 - Missing Configuration Protocol
-- Missing Model Specification
+- Missing Model Structure
 - Missing Evaluation Specification
 - Missing Data Specification
 - Conflicting Objective
@@ -241,7 +241,7 @@ Allowed Level-2 labels:
 Labeling rules:
 - Use Missing Evaluation Specification for metric computation, evaluation split, prompt set, threshold, sampling, seed/sample count, or evaluator configuration.
 - Use Missing Data Specification for data construction, preprocessing, segmentation, stride/windowing, filtering, label construction, tokenization, or normalization.
-- Use Missing Algorithmic Procedure for method procedure, training-loop rule, update order, loss routing, sampling rule, or termination condition.
+- Use Missing Method Procedure for method procedure, training-loop rule, update order, loss routing, sampling rule, or termination condition.
 - Use Ambiguous Procedure when the method permits multiple plausible operational behaviors.
 - Use Ambiguous Definition when a mathematical/formal variable, sign, convention, or definition is unclear.
 - Use Inconsistency only when two concrete sources conflict.
@@ -1108,7 +1108,7 @@ Return STRICT JSON only:
   "final_decision": "main_resolved|review_needed|rejected",
   "decision_reason": "",
   "level1": "Ambiguity|Incompleteness|Inconsistency|null",
-  "level2": "Ambiguous Definition|Ambiguous Procedure|Missing Algorithmic Procedure|Missing Configuration Protocol|Missing Model Specification|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition|null",
+  "level2": "Ambiguous Definition|Ambiguous Procedure|Missing Method Procedure|Missing Configuration Protocol|Missing Model Structure|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition|null",
   "affected_component": "TASK_AND_IO|CORE_ALGORITHM|MODEL_ARCHITECTURE|OBJECTIVE_AND_SUPERVISION|TRAINING_PROCEDURE|DATA_AND_PREPROCESSING|INFERENCE_AND_DECISION|EVALUATION_PROTOCOL|INTERNAL_CONSISTENCY|NONE|null",
   "gold_clarified_detail": "",
   "candidate_strength": "strong|borderline|weak",

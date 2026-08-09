@@ -167,13 +167,13 @@ A method operation, execution rule, inference behavior, or interaction between c
 
 Level-1: Incompleteness
 
-3. Missing Algorithmic Procedure
+3. Missing Method Procedure
 A required operational step, algorithmic rule, update mechanism, decision criterion, or execution procedure is omitted. Without this information, an implementer cannot faithfully reproduce how the method operates.
 
 4. Missing Configuration Protocol
 A result-sensitive configuration choice is introduced, but the specification does not describe how the choice should be determined. Missing information concerns the selection, tuning, or validation procedure for important settings, rather than merely an omitted value.
 
-5. Missing Model Specification
+5. Missing Model Structure
 A model or computational component is mentioned, but its structural configuration is insufficiently specified. Missing details may include layer composition, module organization, dimensional mapping, normalization, activation, or parameterization choices.
 
 6. Missing Evaluation Specification
@@ -217,9 +217,9 @@ VALID_LEVEL1 = {
 VALID_LEVEL2 = {
     "Ambiguous Definition",
     "Ambiguous Procedure",
-    "Missing Algorithmic Procedure",
+    "Missing Method Procedure",
     "Missing Configuration Protocol",
-    "Missing Model Specification",
+    "Missing Model Structure",
     "Missing Evaluation Specification",
     "Missing Data Specification",
     "Conflicting Objective",
@@ -231,9 +231,9 @@ VALID_LEVEL2 = {
 LEVEL2_TO_LEVEL1 = {
     "Ambiguous Definition": "Ambiguity",
     "Ambiguous Procedure": "Ambiguity",
-    "Missing Algorithmic Procedure": "Incompleteness",
+    "Missing Method Procedure": "Incompleteness",
     "Missing Configuration Protocol": "Incompleteness",
-    "Missing Model Specification": "Incompleteness",
+    "Missing Model Structure": "Incompleteness",
     "Missing Evaluation Specification": "Incompleteness",
     "Missing Data Specification": "Incompleteness",
     "Conflicting Objective": "Inconsistency",
@@ -375,7 +375,7 @@ Return JSON only with this exact schema:
       "is_method_core_spec_gap": true/false,
       "gold_clarified_spec_extractable": true/false,
       "level1_candidate": "Ambiguity|Incompleteness|Inconsistency|none",
-      "level2_candidate": "Ambiguous Definition|Ambiguous Procedure|Missing Algorithmic Procedure|Missing Configuration Protocol|Missing Model Specification|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition|none",
+      "level2_candidate": "Ambiguous Definition|Ambiguous Procedure|Missing Method Procedure|Missing Configuration Protocol|Missing Model Structure|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition|none",
       "taxonomy_reason": ""
     }},
     "evidence_snippets": [
@@ -529,7 +529,7 @@ def normalize_route_output(obj: Dict[str, Any], metadata_obj: Dict[str, Any]) ->
         if taxonomy_out["level1_candidate"] == "none":
             taxonomy_out["level1_candidate"] = "Incompleteness"
         if taxonomy_out["level2_candidate"] == "none":
-            taxonomy_out["level2_candidate"] = "Missing Algorithmic Procedure"
+            taxonomy_out["level2_candidate"] = "Missing Method Procedure"
 
     elif primary == "synthetic_controlled":
         taxonomy_out["is_spec_gap"] = False
