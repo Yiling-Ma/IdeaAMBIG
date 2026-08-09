@@ -271,10 +271,10 @@ VALID_LEVEL2_BY_LEVEL1 = {
     },
     "Incompleteness": {
         "Missing Method Procedure",
-        "Missing Configuration Protocol",
         "Missing Model Structure",
-        "Missing Evaluation Specification",
         "Missing Data Specification",
+        "Missing Configuration Protocol",
+        "Missing Evaluation Specification",
     },
     "Inconsistency": {
         "Conflicting Objective",

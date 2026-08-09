@@ -20,57 +20,57 @@ OPENROUTER_MODELS_URL = "https://openrouter.ai/api/v1/models"
 
 
 LEVEL2_TO_LEVEL1 = {
-    "ambiguous formal definition": "Ambiguity",
-    "ambiguous method behavior": "Ambiguity",
-    "missing algorithmic specification": "Incompleteness",
-    "missing hyperparameter protocol": "Incompleteness",
-    "missing model architecture": "Incompleteness",
-    "missing evaluation protocol": "Incompleteness",
-    "missing data/preprocessing protocol": "Incompleteness",
-    "inconsistent objective or loss": "Inconsistency",
-    "inconsistent architecture or pipeline": "Inconsistency",
-    "inconsistent model specification": "Inconsistency",
+    "Ambiguous Definition": "Ambiguity",
+    "Ambiguous Procedure": "Ambiguity",
+    "Missing Method Procedure": "Incompleteness",
+    "Missing Configuration Protocol": "Incompleteness",
+    "Missing Model Structure": "Incompleteness",
+    "Missing Evaluation Specification": "Incompleteness",
+    "Missing Data Specification": "Incompleteness",
+    "Conflicting Objective": "Inconsistency",
+    "Conflicting Model Design": "Inconsistency",
+    "Conflicting Formal Definition": "Inconsistency",
 }
 
 LEVEL2_DEFINITIONS = {
-    "ambiguous formal definition": (
+    "Ambiguous Definition": (
         "A symbol, notation, mathematical object, or formal rule permits multiple "
         "implementation-relevant interpretations."
     ),
-    "ambiguous method behavior": (
+    "Ambiguous Procedure": (
         "A method component, training procedure, inference rule, or stage behavior is "
         "described in a way that permits multiple materially different implementations."
     ),
-    "missing algorithmic specification": (
+    "Missing Method Procedure": (
         "An implementation-critical algorithm step, objective routing rule, update rule, "
         "training procedure, inference logic, decoding rule, or prompt construction detail "
         "is absent."
     ),
-    "missing hyperparameter protocol": (
+    "Missing Configuration Protocol": (
         "A non-standard or result-sensitive hyperparameter selection, search, adaptation, "
         "or scheduling protocol is absent."
     ),
-    "missing model architecture": (
+    "Missing Model Structure": (
         "A structural choice affecting module composition, information flow, representation "
         "shape, pooling, normalization, dimensional mapping, or layer behavior is absent."
     ),
-    "missing evaluation protocol": (
+    "Missing Evaluation Specification": (
         "The evaluation setup is incomplete, including metric computation, data split, "
         "threshold, aggregation, sample selection, or evaluator configuration."
     ),
-    "missing data/preprocessing protocol": (
+    "Missing Data Specification": (
         "The construction, filtering, labeling, tokenization, normalization, augmentation, "
         "windowing, or assembly of data or inputs is absent."
     ),
-    "inconsistent objective or loss": (
+    "Conflicting Objective": (
         "Two explicit statements or sources prescribe conflicting objectives, loss terms, "
         "loss identities, signs, weights, or optimization targets."
     ),
-    "inconsistent architecture or pipeline": (
+    "Conflicting Model Design": (
         "Two explicit statements or sources prescribe conflicting architectures, processing "
         "stages, data flows, layer choices, or pipeline orders."
     ),
-    "inconsistent model specification": (
+    "Conflicting Formal Definition": (
         "Two explicit statements or sources conflict about the formal model, distribution, "
         "assumption, conditioning rule, or marginalization rule."
     ),
@@ -78,13 +78,13 @@ LEVEL2_DEFINITIONS = {
 
 BOUNDARY_RULES = [
     "An absent loss identity, loss routing rule, training objective detail, inference rule, "
-    "or update logic is missing algorithmic specification unless an explicit contradiction exists.",
+    "or update logic is Missing Method Procedure unless an explicit contradiction exists.",
     "A missing structural choice that changes model capacity, information flow, or representation "
-    "shape is missing model architecture.",
+    "shape is Missing Model Structure.",
     "Missing filtering, label construction, tokenization, normalization, augmentation, windowing, "
-    "or data assembly is missing data/preprocessing protocol.",
+    "or data assembly is Missing Data Specification.",
     "Missing metric computation, split, threshold, evaluation sample selection, aggregation, or "
-    "evaluation-model configuration is missing evaluation protocol.",
+    "evaluation-model configuration is Missing Evaluation Specification.",
     "Use an inconsistency label only when the supplied specification contains explicit conflicting "
     "claims; a merely absent detail is an incompleteness.",
 ]
@@ -185,10 +185,10 @@ The taxonomy is:
 {taxonomy_text()}
 
 Additional ambiguity boundary:
-- Use ambiguous formal definition when the uncertainty concerns the meaning,
+- Use Ambiguous Definition when the uncertainty concerns the meaning,
   value, counting convention, mathematical interpretation, or scope of a term,
   symbol, quantity, equation, set, or formally defined object.
-- Use ambiguous method behavior when the uncertainty concerns what an
+- Use Ambiguous Procedure when the uncertainty concerns what an
   algorithm, component, training stage, inference stage, or processing step
   operationally does.
 
