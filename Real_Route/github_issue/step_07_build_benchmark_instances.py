@@ -44,9 +44,9 @@ VALID_LEVEL2_BY_LEVEL1 = {
         "Ambiguous Procedure",
     },
     "Incompleteness": {
-        "Missing Algorithmic Procedure",
+        "Missing Method Procedure",
         "Missing Configuration Protocol",
-        "Missing Model Specification",
+        "Missing Model Structure",
         "Missing Evaluation Specification",
         "Missing Data Specification",
     },
@@ -160,9 +160,7 @@ PAPER_SPEC_DIAGNOSTIC_PATTERNS = [
 
 def load_pipeline07():
     pipeline_path = (
-        Path(__file__).resolve().parents[1]
-        / "pipeline"
-        / "step_07_build_realgap_bench_instances.py"
+        Path(__file__).resolve().parents[1] / "step_07_build_realgap_bench_instances.py"
     )
     spec = importlib.util.spec_from_file_location("pipeline07", pipeline_path)
     if spec is None or spec.loader is None:
@@ -492,7 +490,7 @@ Important constraints:
 
 Allowed labels:
 Level-1 = Ambiguity | Incompleteness | Inconsistency
-Level-2 = Ambiguous Definition | Ambiguous Procedure | Missing Algorithmic Procedure | Missing Configuration Protocol | Missing Model Specification | Missing Evaluation Specification | Missing Data Specification | Conflicting Objective | Conflicting Model Design | Conflicting Formal Definition
+Level-2 = Ambiguous Definition | Ambiguous Procedure | Missing Method Procedure | Missing Configuration Protocol | Missing Model Structure | Missing Evaluation Specification | Missing Data Specification | Conflicting Objective | Conflicting Model Design | Conflicting Formal Definition
 Granularity = coarse | medium | fine
 Resolution role = implementation_blocker | open_design_choice | reproducibility_detail | inconsistency_to_resolve
 Codification slot = TASK_AND_IO | CORE_ALGORITHM | MODEL_ARCHITECTURE | OBJECTIVE_AND_SUPERVISION | TRAINING_PROCEDURE | DATA_AND_PREPROCESSING | INFERENCE_AND_DECISION | EVALUATION_PROTOCOL | INTERNAL_CONSISTENCY | NONE
@@ -693,26 +691,6 @@ def enforce_github_defect_roles(instance: Dict[str, Any]) -> Dict[str, Any]:
 
     if level2 == "Missing Data Specification":
         if slot == "DATA_AND_PREPROCESSING" and role not in VALID_RESOLUTION_ROLES:
-            defect["resolution_role"] = "reproducibility_detail"
-
-    instance["defects"] = [defect] + list(defects[1:])
-    return instance
-
-    defect = dict(defects[0])
-    slot = str(defect.get("codification_slot") or defect.get("slot") or "")
-    level2 = str(defect.get("level2") or "").lower()
-    role = str(defect.get("resolution_role") or "")
-
-    if slot == "evaluation" or "evaluation protocol" in level2:
-        if role == "implementation_blocker":
-            defect["resolution_role"] = "reproducibility_detail"
-
-    if "hyperparameter" in level2:
-        if role == "implementation_blocker":
-            defect["resolution_role"] = "reproducibility_detail"
-
-    if "data/preprocessing protocol" in level2:
-        if slot in {"data", "preprocessing"} and role not in VALID_RESOLUTION_ROLES:
             defect["resolution_role"] = "reproducibility_detail"
 
     instance["defects"] = [defect] + list(defects[1:])

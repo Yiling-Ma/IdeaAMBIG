@@ -270,9 +270,9 @@ VALID_LEVEL2_BY_LEVEL1 = {
         "Ambiguous Procedure",
     },
     "Incompleteness": {
-        "Missing Algorithmic Procedure",
+        "Missing Method Procedure",
         "Missing Configuration Protocol",
-        "Missing Model Specification",
+        "Missing Model Structure",
         "Missing Evaluation Specification",
         "Missing Data Specification",
     },
@@ -675,13 +675,13 @@ Definition: A method component, training procedure, inference rule, or evaluatio
 
 Level-1 = Incompleteness
 
-3. Missing Algorithmic Procedure
+3. Missing Method Procedure
 Definition: A core algorithmic step, interface, update rule, routing decision, or procedural detail is omitted. Without this detail, the method cannot be faithfully implemented.
 
 4. Missing Configuration Protocol
 Definition: A result-sensitive hyperparameter is introduced, but the paper does not specify how its value is chosen, tuned, or validated. The issue is the missing selection protocol rather than a single ordinary unreported value.
 
-5. Missing Model Specification
+5. Missing Model Structure
 Definition: The paper states that a model or module is used but omits structural details such as layer type, normalization, pooling, activation, initialization, or dimensional mapping. These omissions materially affect the implemented model.
 
 6. Missing Evaluation Specification
@@ -705,10 +705,10 @@ Taxonomy decision rules:
 - Assign exactly one Level-1 label for each kept gap.
 - Assign exactly one Level-2 label from the list above.
 - If two categories fit, choose the one that best describes the primary implementation blocker.
-- If the issue is about architecture structure, layer split, activation placement, or named architecture choice, prefer "Missing Model Specification" unless it is explicitly a paper-code contradiction.
+- If the issue is about architecture structure, layer split, activation placement, or named architecture choice, prefer "Missing Model Structure" unless it is explicitly a paper-code contradiction.
 - If the issue is about metric computation, evaluation split, prompt set, threshold, sampling, or evaluator configuration, prefer "Missing Evaluation Specification".
 - If the issue is about data construction, filtering, labeling, augmentation, normalization, tokenization, segmentation, or input transformation, prefer "Missing Data Specification".
-- If the issue is about a core algorithmic procedure or update rule that is not evaluation/data/preprocessing, prefer "Missing Algorithmic Procedure".
+- If the issue is about a core algorithmic procedure or update rule that is not evaluation/data/preprocessing, prefer "Missing Method Procedure".
 - If the issue is about a missing tuning, initialization, stopping, selection, or hyperparameter protocol, prefer "Missing Configuration Protocol".
 - If the issue is paper-code contradiction, prefer an inconsistency label.
 - If the issue is a paper figure or diagram that implies a different architecture than the authors' code, prefer "Inconsistency / Conflicting Model Design".
@@ -739,7 +739,7 @@ Return JSON only with exactly this schema:
       "source_specification_quote_from_original_paper": "",
       "affected_component": "TASK_AND_IO|CORE_ALGORITHM|MODEL_ARCHITECTURE|OBJECTIVE_AND_SUPERVISION|TRAINING_PROCEDURE|DATA_AND_PREPROCESSING|INFERENCE_AND_DECISION|EVALUATION_PROTOCOL|INTERNAL_CONSISTENCY|NONE",
       "level1": "Ambiguity|Incompleteness|Inconsistency",
-      "level2": "Ambiguous Definition|Ambiguous Procedure|Missing Algorithmic Procedure|Missing Configuration Protocol|Missing Model Specification|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition",
+      "level2": "Ambiguous Definition|Ambiguous Procedure|Missing Method Procedure|Missing Configuration Protocol|Missing Model Structure|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition",
       "taxonomy_rationale": "",
       "gold_clarified_detail": "",
       "why_this_blocks_or_affects_codification": "",
@@ -761,7 +761,7 @@ Return JSON only with exactly this schema:
       "why_unresolved": "",
       "affected_component": "TASK_AND_IO|CORE_ALGORITHM|MODEL_ARCHITECTURE|OBJECTIVE_AND_SUPERVISION|TRAINING_PROCEDURE|DATA_AND_PREPROCESSING|INFERENCE_AND_DECISION|EVALUATION_PROTOCOL|INTERNAL_CONSISTENCY|NONE",
       "level1": "Ambiguity|Incompleteness|Inconsistency",
-      "level2": "Ambiguous Definition|Ambiguous Procedure|Missing Algorithmic Procedure|Missing Configuration Protocol|Missing Model Specification|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition",
+      "level2": "Ambiguous Definition|Ambiguous Procedure|Missing Method Procedure|Missing Configuration Protocol|Missing Model Structure|Missing Evaluation Specification|Missing Data Specification|Conflicting Objective|Conflicting Model Design|Conflicting Formal Definition",
       "taxonomy_rationale": "",
       "candidate_strength": "strong|borderline|weak",
       "strength_rationale": "",
