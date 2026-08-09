@@ -27,19 +27,16 @@ MODELS: dict[str, dict[str, Any]] = {
         "group": "baseline",
         "name": "Random Guess",
     },
-    "deepseek/deepseek-v4-pro": {
-        "group": "frontier_proprietary",
-    },
-    "openai/gpt-5.4": {
-        "group": "frontier_proprietary",
-    },
     "openai/gpt-5.6-sol": {
+        "group": "frontier_proprietary",
+    },
+    "anthropic/claude-sonnet-5": {
         "group": "frontier_proprietary",
     },
     "google/gemini-3.1-pro-preview": {
         "group": "frontier_proprietary",
     },
-    "anthropic/claude-sonnet-5": {
+    "deepseek/deepseek-v3.2": {
         "group": "frontier_proprietary",
     },
     "qwen/qwen3-8b": {
@@ -52,9 +49,6 @@ MODELS: dict[str, dict[str, Any]] = {
         "group": "open_weight",
     },
     "qwen/qwen3-32b": {
-        "group": "open_weight",
-    },
-    "deepseek/deepseek-r1": {
         "group": "open_weight",
     },
     "deepseek/deepseek-r1-0528": {

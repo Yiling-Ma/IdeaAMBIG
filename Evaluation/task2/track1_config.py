@@ -99,7 +99,12 @@ EXCLUSION_RULES = [
 ]
 
 MODELS: dict[str, dict[str, str]] = {
+    "openai/gpt-5.6-sol": {"group": "frontier_proprietary"},
+    "anthropic/claude-sonnet-5": {"group": "frontier_proprietary"},
+    "google/gemini-3.1-pro-preview": {"group": "frontier_proprietary"},
+    "deepseek/deepseek-v3.2": {"group": "frontier_proprietary"},
     "qwen/qwen3-8b": {"group": "open_weight"},
+    "qwen/qwen3-32b": {"group": "open_weight"},
     "qwen/qwen3.5-9b": {"group": "open_weight"},
     "qwen/qwen3.5-397b-a17b": {"group": "open_weight"},
     "deepseek/deepseek-r1-0528": {"group": "open_weight"},
@@ -109,16 +114,9 @@ MODELS: dict[str, dict[str, str]] = {
     "moonshotai/kimi-k3": {"group": "open_weight"},
 }
 
-# Extra catalog models may be requested explicitly without changing the frozen
-# model suite selected by --models all.
-OPTIONAL_MODEL_GROUPS = {
-    "google/gemini-3.1-pro-preview": "frontier_proprietary",
-    "anthropic/claude-sonnet-5": "frontier_proprietary",
-    "openai/gpt-5.6-sol": "frontier_proprietary",
-    "deepseek/deepseek-v4-pro": "frontier_proprietary",
-    "qwen/qwen3-32b": "open_weight",
-    "deepseek/deepseek-r1": "open_weight",
-}
+# Extra catalog models may be requested explicitly (by exact ID) without
+# changing the frozen 13-model suite selected by --models all.
+OPTIONAL_MODEL_GROUPS: dict[str, str] = {}
 
 SYSTEM_PROMPT = (
     "You are an expert scientific-method reviewer performing controlled defect "

@@ -190,7 +190,7 @@ def judge_prompt(record: dict[str, Any]) -> str:
             },
         },
         "aggregation_rule": (
-            "Final RGS = 0.4 * label_support + 0.4 * blocker_match + 0.2 * faithfulness. "
+            "Final RGS = 0.7 * label_support + 0.2 * blocker_match + 0.1 * faithfulness. "
             "Do not compute the final score yourself; only return the three subscores."
         ),
         "important_rule_for_ready_cases": (
@@ -268,7 +268,7 @@ def judge_one(
             blocker_match = validate_subscore(judged.get("blocker_match"), "blocker_match")
             faithfulness = validate_subscore(judged.get("faithfulness"), "faithfulness")
             reason_grounding_score = (
-                0.4 * label_support + 0.4 * blocker_match + 0.2 * faithfulness
+                0.7 * label_support + 0.2 * blocker_match + 0.1 * faithfulness
             )
             return {
                 **record,
