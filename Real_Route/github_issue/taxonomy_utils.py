@@ -11,10 +11,10 @@ LEVEL2_TO_LEVEL1: Dict[str, str] = {
 
     # Incompleteness
     "Missing Method Procedure": "Incompleteness",
-    "Missing Configuration Protocol": "Incompleteness",
     "Missing Model Structure": "Incompleteness",
-    "Missing Evaluation Specification": "Incompleteness",
     "Missing Data Specification": "Incompleteness",
+    "Missing Configuration Protocol": "Incompleteness",
+    "Missing Evaluation Specification": "Incompleteness",
 
     # Inconsistency
     "Conflicting Objective": "Inconsistency",
@@ -59,30 +59,30 @@ Incompleteness
    criterion, or execution procedure is omitted. Without this information, an
    implementer cannot faithfully reproduce how the method operates.
 
-4. Missing Configuration Protocol
+4. Missing Model Structure
+   A model or computational component is mentioned, but its structural configuration
+   is insufficiently specified. Missing details may include layer composition,
+   module organization, dimensional mapping, normalization, activation, or
+   parameterization choices that affect the instantiated model.
+
+5. Missing Data Specification
+   The construction or transformation of input data is incompletely described.
+   Missing details may include data filtering, labeling, augmentation,
+   normalization, tokenization, segmentation, or other preprocessing steps that
+   affect the resulting inputs or supervision signals.
+
+6. Missing Configuration Protocol
    A result-sensitive configuration choice is introduced, but the specification does
    not describe how the choice should be determined. Missing information concerns
    the selection, tuning, or validation procedure for important settings (e.g.,
    hyperparameters, thresholds, initialization choices, or sampling parameters),
    rather than merely an omitted value.
 
-5. Missing Model Structure
-   A model or computational component is mentioned, but its structural configuration
-   is insufficiently specified. Missing details may include layer composition,
-   module organization, dimensional mapping, normalization, activation, or
-   parameterization choices that affect the instantiated model.
-
-6. Missing Evaluation Specification
+7. Missing Evaluation Specification
    The evaluation procedure is incompletely described, including missing metric
    definitions, evaluation protocols, data splits, sampling procedures, prompts,
    thresholds, or evaluation configurations. Such omissions prevent faithful
    reproduction or comparison of reported results.
-
-7. Missing Data Specification
-   The construction or transformation of input data is incompletely described.
-   Missing details may include data filtering, labeling, augmentation,
-   normalization, tokenization, segmentation, or other preprocessing steps that
-   affect the resulting inputs or supervision signals.
 
 Inconsistency
 8. Conflicting Objective
