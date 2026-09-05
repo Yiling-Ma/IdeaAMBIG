@@ -492,6 +492,13 @@ Allowed labels:
 Level-1 = Ambiguity | Incompleteness | Inconsistency
 Level-2 = Ambiguous Definition | Ambiguous Procedure | Missing Method Procedure | Missing Configuration Protocol | Missing Model Structure | Missing Evaluation Specification | Missing Data Specification | Conflicting Objective | Conflicting Model Design | Conflicting Formal Definition
 Granularity = coarse | medium | fine
+
+Granularity guidance:
+- coarse: an entire method component is missing or undefined (the codification slot itself is essentially unaddressed), so multiple downstream implementation steps are underdetermined at once.
+- medium: one specific operation, step, or parameter is missing or wrong within an otherwise well-specified component; the surrounding module is clear. Example: a graph-attention score is fully specified except that a LeakyReLU nonlinearity before softmax is omitted.
+- fine: a local wording ambiguity with a small, enumerable set of plausible readings, with no operation missing. Example: "8x8 cell grid" could mean 8x8-pixel cells or an 8x8 grid spanning the full image.
+- Vague quantifiers (e.g., "multiple", "a threshold") whose gold value is a concrete number or setting are medium, unless the concrete value changes the qualitative behavior of the method, in which case they are coarse.
+
 Resolution role = implementation_blocker | open_design_choice | reproducibility_detail | inconsistency_to_resolve
 Codification slot = TASK_AND_IO | CORE_ALGORITHM | MODEL_ARCHITECTURE | OBJECTIVE_AND_SUPERVISION | TRAINING_PROCEDURE | DATA_AND_PREPROCESSING | INFERENCE_AND_DECISION | EVALUATION_PROTOCOL | INTERNAL_CONSISTENCY | NONE
 Action type = clarification_question | evidence_seeking | experiment_selection

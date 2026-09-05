@@ -129,6 +129,12 @@ Do not invent unsupported details.
         },
         "schema_alignment": {
             "granularity_allowed_values": ["coarse", "medium", "fine"],
+            "granularity_guidance": [
+                "coarse: an entire method component is missing or undefined (the codification slot itself is essentially unaddressed), so multiple downstream implementation steps are underdetermined at once.",
+                "medium: one specific operation, step, or parameter is missing or wrong within an otherwise well-specified component; the surrounding module is clear. Example: a graph-attention score is fully specified except that a LeakyReLU nonlinearity before softmax is omitted.",
+                "fine: a local wording ambiguity with a small, enumerable set of plausible readings, with no operation missing. Example: '8x8 cell grid' could mean 8x8-pixel cells or an 8x8 grid spanning the full image.",
+                "Vague quantifiers (e.g., 'multiple', 'a threshold') whose gold value is a concrete number or setting are medium, unless the concrete value changes the qualitative behavior of the method, in which case they are coarse.",
+            ],
             "defect_operation_allowed_values": [
                 "omit_detail",
                 "abstract_detail",
