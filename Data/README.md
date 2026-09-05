@@ -59,6 +59,23 @@ Appendix B.3; the same taxonomy is implemented in
 `TRAINING_PROCEDURE`, `DATA_AND_PREPROCESSING`, `INFERENCE_AND_DECISION`,
 `EVALUATION_PROTOCOL`, `INTERNAL_CONSISTENCY`, `NONE`.
 
+## Multi-Defect Ablation (Appendix E.3)
+
+`syn_multi_defect_k2.jsonl` (50 instances) and `multi_defect_eval_results.json`
+support the exploratory multi-defect readiness/localization ablation in the
+paper's Appendix~E.3. Each entry in `syn_multi_defect_k2.jsonl` combines two
+already-validated single-defect controlled-synthetic siblings (same
+`gold.codification_ready_reference`) into one specification with
+`defects` containing both target defects, `slot_stratum`
+(`same_slot`/`different_slot`, stratified 25/25), and
+`baseline_single_defect_ids` pointing back to the two original
+`syn_benchmark_instance.jsonl` entries used as the paired single-defect
+baseline. `multi_defect_eval_results.json` holds the GPT-5.6-Sol
+predictions and Claude Opus 4.8 judge outcomes for both the multi-defect
+and paired-baseline conditions. Reconstruct with
+`Syn_Route/multi_defect_ablation/build_multi_defect_synthetic.py` and
+`Evaluation/multi_defect_ablation/run_multi_defect_eval.py`.
+
 ## Notes
 
 - Every instance is single-defect: `defects` (and the corresponding
