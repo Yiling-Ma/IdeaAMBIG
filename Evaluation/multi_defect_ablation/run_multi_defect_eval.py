@@ -30,18 +30,69 @@ GEN_MODEL = "openai/gpt-5.6-sol"
 JUDGE_MODEL = "anthropic/claude-opus-4.8"
 
 
+SYSTEM_PROMPT_MULTI = (
+    "You are an expert scientific-method reviewer performing controlled defect "
+    "localization. Follow the supplied IDEAAMBIG taxonomy. This specification "
+    "may contain more than one implementation-critical defect, but most "
+    "specifications contain very few. Report only the defect or defects you "
+    "are confident meet the criteria below; do not produce a long list of "
+    "minor or speculative concerns. Do not repair the idea or invent missing "
+    "details. Return strict JSON only."
+)
+
+
 def t2_prompt_multi(input_text: str) -> str:
     base = t2_prompt_single(input_text)
+
+    # (1) Opening task statement: "the single ... defect" -> "every ... defect".
+    base = base.replace(
+        "Your task is to identify and classify the single implementation-critical\n"
+        "specification defect in the given research idea according to the IDEAAMBIG\n"
+        "taxonomy.",
+        "Your task is to identify and classify every implementation-critical\n"
+        "specification defect in the given research idea according to the IDEAAMBIG\n"
+        "taxonomy.",
+    )
+
+    # (2) Single-target framing paragraph -> bounded multi-target framing.
+    # Keeps the same emphasis on selectivity as the single-defect prompt
+    # (this is what keeps the main benchmark's Loc-Acc precise), while no
+    # longer forcing a hard cap of exactly one.
     base = base.replace(
         "Each specification in this benchmark is constructed with exactly one annotated\n"
         "target defect. Your goal is not to find all possible weaknesses. Your goal is\n"
         "to recover the single target defect category that best explains why the\n"
         "specification is not implementation-ready.",
         "This specification may contain more than one implementation-critical\n"
-        "specification defect. Identify every such defect you can find and classify\n"
-        "each one according to the IDEAAMBIG taxonomy. Do not list ordinary\n"
-        "engineering choices or speculative concerns as defects.",
+        "defect, but most specifications contain very few (often one, sometimes\n"
+        "two). Your goal is not to find all possible weaknesses. Your goal is to\n"
+        "recover only the defect or defects that genuinely leave the\n"
+        "specification not implementation-ready.",
     )
+
+    # (3) "select only the strongest defect" forces collapsing multiple real
+    # issues into one. Keep the same selectivity bar, but allow more than one
+    # entry when more than one genuinely, independently meets it.
+    base = base.replace(
+        "If multiple possible issues are visible, internally rank them and select only\n"
+        "the strongest defect that is:",
+        "If multiple possible issues are visible, keep only those that are each\n"
+        "independently:",
+    )
+
+    # (4) Numbered rules that explicitly forbid multiple defects.
+    base = base.replace(
+        "Rules:\n"
+        "1. Select exactly one Level-1 category and one Level-2 category.\n"
+        "2. Do not output multiple defects or alternative labels.\n",
+        "Rules:\n"
+        "1. For each defect you report, select exactly one Level-1 category and\n"
+        "   one Level-2 category.\n"
+        "2. Report only defects that independently and fully meet the criteria\n"
+        "   above; do not merge distinct defects into one entry, but do not\n"
+        "   pad the list with minor or speculative concerns either.\n",
+    )
+
     base = base.replace(
         'Return only valid JSON:\n{\n  "description": "one concrete atomic defect diagnosis",\n'
         '  "level1": "Ambiguity|Incompleteness|Inconsistency",\n  "level2": "one allowed Level-2 label"\n}',
@@ -126,7 +177,7 @@ def eval_multi(client: OpenAI, inst: dict) -> dict:
     letter = "A" if "A" in t1_reply[:2] else ("B" if "B" in t1_reply[:2] else None)
     readiness_pred = mapping.get(letter, "PARSE_ERROR")
 
-    t2_reply = gen_call(client, t2_system, t2_prompt_multi(spec), json_mode=True)
+    t2_reply = gen_call(client, SYSTEM_PROMPT_MULTI, t2_prompt_multi(spec), json_mode=True)
     pred_defects = json.loads(t2_reply).get("defects", [])
     pred_descs = [d.get("description", "") for d in pred_defects if d.get("description")]
 
