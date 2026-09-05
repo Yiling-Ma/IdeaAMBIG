@@ -22,7 +22,7 @@
       "id": "openreview_mlrc_2021_BtZVD2f7n0F_direct_synthetic_defect_005",
       "condition": "single",
       "readiness_pred": "NOT_READY",
-      "loc_match": true
+      "loc_match": false
     },
     {
       "id": "ecir_pdf_2025_8b14d9cf49_direct_synthetic_defect_001",
@@ -88,7 +88,7 @@
       "id": "tmlr_2026_44145bd709_direct_synthetic_defect_002",
       "condition": "single",
       "readiness_pred": "NOT_READY",
-      "loc_match": true
+      "loc_match": false
     },
     {
       "id": "tmlr_2026_44145bd709_direct_synthetic_defect_003",
@@ -118,7 +118,7 @@
       "id": "ecir_pdf_2020_4a4e32fabc_direct_synthetic_defect_004",
       "condition": "single",
       "readiness_pred": "NOT_READY",
-      "loc_match": true
+      "loc_match": false
     },
     {
       "id": "openreview_mlrc_2021_B9gDnMmn0t_direct_synthetic_defect_001",
@@ -129,7 +129,7 @@
     {
       "id": "openreview_mlrc_2021_B9gDnMmn0t_direct_synthetic_defect_002",
       "condition": "single",
-      "readiness_pred": "NOT_READY",
+      "readiness_pred": "READY",
       "loc_match": false
     },
     {
@@ -165,7 +165,7 @@
     {
       "id": "ai_researcher_execution_030_direct_synthetic_defect_002",
       "condition": "single",
-      "readiness_pred": "NOT_READY",
+      "readiness_pred": "READY",
       "loc_match": false
     },
     {
@@ -238,7 +238,7 @@
       "id": "ai_researcher_execution_005_direct_synthetic_defect_004",
       "condition": "single",
       "readiness_pred": "NOT_READY",
-      "loc_match": true
+      "loc_match": false
     },
     {
       "id": "ecir_pdf_2025_acd976536c_direct_synthetic_defect_002",
@@ -256,7 +256,7 @@
       "id": "ai_researcher_execution_006_direct_synthetic_defect_001",
       "condition": "single",
       "readiness_pred": "NOT_READY",
-      "loc_match": true
+      "loc_match": false
     },
     {
       "id": "ai_researcher_execution_006_direct_synthetic_defect_002",
@@ -304,7 +304,7 @@
       "id": "openreview_mlrc_2021_S9Ilqhz7hAK_direct_synthetic_defect_001",
       "condition": "single",
       "readiness_pred": "NOT_READY",
-      "loc_match": false
+      "loc_match": true
     },
     {
       "id": "openreview_mlrc_2021_S9Ilqhz7hAK_direct_synthetic_defect_002",
@@ -339,7 +339,7 @@
     {
       "id": "ecir_pdf_2025_16d590dd43_direct_synthetic_defect_001",
       "condition": "single",
-      "readiness_pred": "READY",
+      "readiness_pred": "NOT_READY",
       "loc_match": false
     },
     {
@@ -381,7 +381,7 @@
     {
       "id": "openreview_mlrc_2021_r4xe3nMQ3AY_direct_synthetic_defect_004",
       "condition": "single",
-      "readiness_pred": "READY",
+      "readiness_pred": "NOT_READY",
       "loc_match": false
     },
     {
@@ -435,8 +435,8 @@
     {
       "id": "tmlr_2025_a7223ae11d_direct_synthetic_defect_003",
       "condition": "single",
-      "readiness_pred": "NOT_READY",
-      "loc_match": false
+      "readiness_pred": "READY",
+      "loc_match": true
     },
     {
       "id": "tmlr_2025_a7223ae11d_direct_synthetic_defect_004",
@@ -459,20 +459,20 @@
     {
       "id": "openreview_mlrc_2022_n2qXFXiMsAM_direct_synthetic_defect_003",
       "condition": "single",
-      "readiness_pred": "READY",
+      "readiness_pred": "NOT_READY",
       "loc_match": false
     },
     {
       "id": "openreview_mlrc_2022_n2qXFXiMsAM_direct_synthetic_defect_004",
       "condition": "single",
       "readiness_pred": "NOT_READY",
-      "loc_match": true
+      "loc_match": false
     },
     {
       "id": "ai_researcher_execution_023_direct_synthetic_defect_001",
       "condition": "single",
       "readiness_pred": "NOT_READY",
-      "loc_match": false
+      "loc_match": true
     },
     {
       "id": "ai_researcher_execution_023_direct_synthetic_defect_002",
@@ -513,7 +513,7 @@
     {
       "id": "ai_researcher_execution_044_direct_synthetic_defect_005",
       "condition": "single",
-      "readiness_pred": "NOT_READY",
+      "readiness_pred": "READY",
       "loc_match": false
     },
     {
@@ -597,7 +597,7 @@
     {
       "id": "ai_researcher_execution_054_direct_synthetic_defect_005",
       "condition": "single",
-      "readiness_pred": "READY",
+      "readiness_pred": "NOT_READY",
       "loc_match": false
     }
   ],
@@ -607,7 +607,7 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
         false
@@ -620,12 +620,12 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
-        false,
+        true,
         false
       ],
-      "any_hit": false,
+      "any_hit": true,
       "all_hit": false
     },
     {
@@ -633,12 +633,12 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
-        false
+        true
       ],
-      "any_hit": false,
+      "any_hit": true,
       "all_hit": false
     },
     {
@@ -646,12 +646,12 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
-        false,
+        true,
         false
       ],
-      "any_hit": false,
+      "any_hit": true,
       "all_hit": false
     },
     {
@@ -659,12 +659,12 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
-        false,
+        true,
         false
       ],
-      "any_hit": false,
+      "any_hit": true,
       "all_hit": false
     },
     {
@@ -672,7 +672,7 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
         false
@@ -685,7 +685,7 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         true,
         false
@@ -698,7 +698,7 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
         true,
         false
@@ -711,7 +711,7 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 4,
       "hits": [
         false,
         false
@@ -724,7 +724,7 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
         true
@@ -750,7 +750,7 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
         false
@@ -776,7 +776,7 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
         false,
         false
@@ -789,12 +789,12 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
-        false,
+        true,
         false
       ],
-      "any_hit": false,
+      "any_hit": true,
       "all_hit": false
     },
     {
@@ -815,20 +815,20 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         true,
-        false
+        true
       ],
       "any_hit": true,
-      "all_hit": false
+      "all_hit": true
     },
     {
       "id": "ai_researcher_execution_026_direct_synthetic_defect_001__PLUS__003",
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         true,
         false
@@ -841,7 +841,7 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
         true
@@ -854,7 +854,7 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
         false
@@ -867,12 +867,12 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
-        false,
+        true,
         false
       ],
-      "any_hit": false,
+      "any_hit": true,
       "all_hit": false
     },
     {
@@ -880,7 +880,7 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
         true,
         false
@@ -893,12 +893,12 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
-        false
+        true
       ],
-      "any_hit": false,
+      "any_hit": true,
       "all_hit": false
     },
     {
@@ -906,7 +906,7 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
         true,
         false
@@ -919,7 +919,7 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
         false
@@ -932,20 +932,20 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
-        false,
+        true,
         true
       ],
       "any_hit": true,
-      "all_hit": false
+      "all_hit": true
     },
     {
       "id": "openreview_mlrc_2021_rNgg03fXnRY_direct_synthetic_defect_003__PLUS__004",
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
         false
@@ -957,7 +957,7 @@
       "id": "openreview_mlrc_2022_t8ZZ2Y356Ix_direct_synthetic_defect_001__PLUS__005",
       "condition": "multi",
       "slot_stratum": "diff_slot",
-      "readiness_pred": "READY",
+      "readiness_pred": "NOT_READY",
       "num_predicted_defects": 1,
       "hits": [
         false,
@@ -971,7 +971,7 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
         true
@@ -984,12 +984,12 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
-        false,
+        true,
         false
       ],
-      "any_hit": false,
+      "any_hit": true,
       "all_hit": false
     },
     {
@@ -997,12 +997,12 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
-        false,
+        true,
         false
       ],
-      "any_hit": false,
+      "any_hit": true,
       "all_hit": false
     },
     {
@@ -1010,7 +1010,7 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
         false,
         false
@@ -1023,20 +1023,7 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
-      "hits": [
-        false,
-        false
-      ],
-      "any_hit": false,
-      "all_hit": false
-    },
-    {
-      "id": "tmlr_2026_a1bb593aec_direct_synthetic_defect_004__PLUS__005",
-      "condition": "multi",
-      "slot_stratum": "same_slot",
-      "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
         false,
         true
@@ -1045,11 +1032,24 @@
       "all_hit": false
     },
     {
+      "id": "tmlr_2026_a1bb593aec_direct_synthetic_defect_004__PLUS__005",
+      "condition": "multi",
+      "slot_stratum": "same_slot",
+      "readiness_pred": "NOT_READY",
+      "num_predicted_defects": 2,
+      "hits": [
+        true,
+        true
+      ],
+      "any_hit": true,
+      "all_hit": true
+    },
+    {
       "id": "tmlr_2025_8223796ba7_direct_synthetic_defect_003__PLUS__004",
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
         true,
         false
@@ -1062,7 +1062,7 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
         false
@@ -1074,7 +1074,7 @@
       "id": "tmlr_2025_a7223ae11d_direct_synthetic_defect_003__PLUS__004",
       "condition": "multi",
       "slot_stratum": "same_slot",
-      "readiness_pred": "READY",
+      "readiness_pred": "NOT_READY",
       "num_predicted_defects": 1,
       "hits": [
         false,
@@ -1088,7 +1088,7 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 4,
       "hits": [
         false,
         false
@@ -1101,7 +1101,7 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
         true
@@ -1114,12 +1114,12 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
-        false,
+        true,
         false
       ],
-      "any_hit": false,
+      "any_hit": true,
       "all_hit": false
     },
     {
@@ -1127,7 +1127,7 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
         false,
         true
@@ -1140,7 +1140,7 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
         false
@@ -1179,12 +1179,12 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
-        false,
+        true,
         false
       ],
-      "any_hit": false,
+      "any_hit": true,
       "all_hit": false
     },
     {
@@ -1205,12 +1205,12 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 4,
       "hits": [
         false,
-        false
+        true
       ],
-      "any_hit": false,
+      "any_hit": true,
       "all_hit": false
     },
     {
@@ -1218,12 +1218,12 @@
       "condition": "multi",
       "slot_stratum": "same_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 2,
       "hits": [
         false,
-        false
+        true
       ],
-      "any_hit": false,
+      "any_hit": true,
       "all_hit": false
     },
     {
@@ -1231,7 +1231,7 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
         false,
         false
@@ -1244,13 +1244,13 @@
       "condition": "multi",
       "slot_stratum": "diff_slot",
       "readiness_pred": "NOT_READY",
-      "num_predicted_defects": 1,
+      "num_predicted_defects": 3,
       "hits": [
         true,
-        false
+        true
       ],
       "any_hit": true,
-      "all_hit": false
+      "all_hit": true
     }
   ]
 }
