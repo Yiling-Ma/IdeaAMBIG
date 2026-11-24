@@ -79,7 +79,10 @@ evidence-supported, implementation-critical defect.
 tasks and reports the paper's primary metrics: Macro-F1 (Task 1 readiness
 assessment), Macro Defect Recovery Rate (Task 2 defect localization), and
 Macro Clarification Action Success Rate (Task 3 clarification generation).
-Semantic and rubric-based judging uses `anthropic/claude-opus-4.8`. See
+Semantic and rubric-based judging for the three benchmark tasks uses
+`anthropic/claude-opus-4.8`. The oracle clarification-utility study reports
+ratings from two independent human annotators blinded to the generation
+condition; its optional automated diagnostic is documented separately. See
 [`Evaluation/README.md`](Evaluation/README.md) for exact commands, including
 the Table 9 end-to-end vs. defect-guided ablation and the Table 2 oracle
 clarification-utility study.

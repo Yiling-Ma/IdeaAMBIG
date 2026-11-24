@@ -220,9 +220,13 @@ python Evaluation/task3/summarize_information_bottleneck.py \
 ## Table 2 — Oracle clarification utility (Section 4.4)
 
 Compares DIRECT GENERATION (spec only) against CLARIFICATION-ASSISTED
-GENERATION (spec + gold clarification + oracle resolution) on paired
-instances, using an LLM judge for READY rate, completeness, missing-detail
-recovery, and unsupported-assumption rate.
+GENERATION (spec + gold clarification + oracle resolution) on 50 paired
+real-world instances. The paper reports human ratings for READY rate,
+completeness, missing-detail recovery, and unsupported-assumption rate.
+Two human annotators independently score all generated specifications while
+blinded to the generation condition. Disagreements are resolved through
+discussion or adjudication by a third annotator. The reported scores,
+confidence intervals, and significance tests use these final human judgments.
 
 Generate both conditions' downstream specifications:
 
@@ -233,7 +237,13 @@ python Evaluation/task3/downstream_clarification.py \
   --workers 4
 ```
 
-Judge the generated specifications:
+### Optional automated diagnostic scoring
+
+The following LLM-judge commands provide an optional automated diagnostic.
+Their outputs are separate from the human ratings reported in the paper
+and do not replace the blinded human evaluation described above.
+
+Judge the generated specifications automatically:
 
 ```bash
 python Evaluation/task3/run_downstream_judge.py \
@@ -241,7 +251,7 @@ python Evaluation/task3/run_downstream_judge.py \
   --workers 4
 ```
 
-Score and run paired significance tests:
+Score the automated diagnostic outputs:
 
 ```bash
 python Evaluation/task3/score_downstream_judge.py \
@@ -249,12 +259,13 @@ python Evaluation/task3/score_downstream_judge.py \
   --bootstrap-samples 10000
 ```
 
-Note: `score_downstream_judge.py` runs a paired bootstrap for all four
-metrics. The paper's Table 2 additionally reports two-sided exact McNemar
-tests for the binary outcomes (READY Rate, Unsupported Assumption Rate), a
-paired permutation test for Completeness, and Holm-adjusted p-values — apply
-those separately over this script's judgment output if reproducing the exact
-Table 2 statistics.
+Note: `score_downstream_judge.py` runs a paired bootstrap for the four
+automatically judged metrics. Reproducing the paper's reported oracle-utility
+results requires the final human judgments, with paired-bootstrap confidence
+intervals, two-sided exact McNemar tests for binary outcomes, a paired
+permutation test for Completeness, and Holm-adjusted p-values. Automated
+judgments from this optional pipeline are not the input to the paper's
+reported statistics.
 
 `run_baselines_non_llm.py` provides non-LLM (heuristic) baselines for Task 3
 and is not part of the main model-comparison pipeline above.
