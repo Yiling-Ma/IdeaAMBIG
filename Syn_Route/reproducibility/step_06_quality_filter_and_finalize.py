@@ -81,6 +81,7 @@ def deterministic_reasons(inst: Dict[str, Any]) -> List[str]:
         reasons.append("missing_underspecified_spec")
     if level2 not in ALLOWED_LEVEL2:
         reasons.append("invalid_level2")
+    # Reject this historical label; it is not a member of ALLOWED_LEVEL2.
     if "missing objective/loss specification" in str(defect.get("level2") or "").lower():
         reasons.append("disallowed_missing_objective_loss_label")
 

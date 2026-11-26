@@ -207,6 +207,7 @@ VALID_PRIMARY_ROUTES = {
     "unusable",
 }
 
+# The extra "none" value is a routing-only sentinel, not a taxonomy category.
 VALID_LEVEL1 = {
     "Ambiguity",
     "Incompleteness",

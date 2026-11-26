@@ -44,6 +44,10 @@ eval_targets                  per-task evaluation targets used by Evaluation/:
 
 ## Taxonomy
 
+Canonical reference: [TAXONOMY.md](../TAXONOMY.md) and
+[taxonomy.json](../taxonomy.json). Verify with
+`python3 scripts/check_taxonomy.py` from the repository root.
+
 3 Level-1 types and 10 Level-2 categories (definitions in the paper's
 Appendix B.3; the same taxonomy is implemented in
 `Real_Route/github_issue/taxonomy_utils.py` and mirrored across `Syn_Route/`):
@@ -78,9 +82,9 @@ and paired-baseline conditions. Reconstruct with
 
 ## Notes
 
-- Every instance is single-defect: `defects` (and the corresponding
+- Every main-benchmark instance is single-defect: `defects` (and the corresponding
   `eval_targets.underspecified.expected_defects`) always has exactly one
-  element.
+  element. The separate multi-defect ablation file has two defects per record.
 - The `reference` side of `eval_targets` always describes a READY
   specification with no defect: `expected_defects: []` and
   `expected_clarification_actions: []` are expected there, not a bug.

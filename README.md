@@ -259,3 +259,10 @@ See [Evaluation/README.md](Evaluation/README.md) for per-task runners, judging, 
   url    = {https://arxiv.org/abs/2609.10539}
 }
 ```
+
+## Taxonomy consistency
+
+The final three Level-1 types and ten Level-2 categories are specified in
+[TAXONOMY.md](TAXONOMY.md) and [taxonomy.json](taxonomy.json), matching both
+paper versions and the project website. Run `python3 scripts/check_taxonomy.py`
+to verify released records and the construction/evaluation label declarations.

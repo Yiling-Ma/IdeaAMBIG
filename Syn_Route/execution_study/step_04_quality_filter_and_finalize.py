@@ -25,6 +25,8 @@ from common import (
 
 FINAL_LEVEL2_TO_LEVEL1 = dict(LEVEL2_TO_LEVEL1)
 
+# Historical spellings are rejection rules, not supported taxonomy categories.
+# Do not replace these entries with canonical labels: that would reject valid data.
 DISALLOWED_LEVEL2 = {
     "missing objective/loss specification",
     "missing objective specification",

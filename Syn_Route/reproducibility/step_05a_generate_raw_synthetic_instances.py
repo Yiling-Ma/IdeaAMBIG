@@ -107,6 +107,7 @@ Do not invent unsupported details.
         ],
         "taxonomy": {
             "allowed_level2_to_level1": LEVEL2_TO_LEVEL1,
+            # Explicitly forbid obsolete names; the allowed map above is canonical.
             "disallowed_labels": [
                 "missing objective/loss specification",
                 "missing objective specification",

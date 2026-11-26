@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "level1": [
+    "Ambiguity",
+    "Incompleteness",
+    "Inconsistency"
+  ],
+  "level2": [
+    {
+      "label": "Ambiguous Definition",
+      "level1": "Ambiguity"
+    },
+    {
+      "label": "Ambiguous Procedure",
+      "level1": "Ambiguity"
+    },
+    {
+      "label": "Missing Method Procedure",
+      "level1": "Incompleteness"
+    },
+    {
+      "label": "Missing Model Structure",
+      "level1": "Incompleteness"
+    },
+    {
+      "label": "Missing Data Specification",
+      "level1": "Incompleteness"
+    },
+    {
+      "label": "Missing Configuration Protocol",
+      "level1": "Incompleteness"
+    },
+    {
+      "label": "Missing Evaluation Specification",
+      "level1": "Incompleteness"
+    },
+    {
+      "label": "Conflicting Objective",
+      "level1": "Inconsistency"
+    },
+    {
+      "label": "Conflicting Model Design",
+      "level1": "Inconsistency"
+    },
+    {
+      "label": "Conflicting Formal Definition",
+      "level1": "Inconsistency"
+    }
+  ],
+  "figure_abbreviations": {
+    "Ambig. Def.": "Ambiguous Definition",
+    "Ambig. Proc.": "Ambiguous Procedure",
+    "Miss. Method": "Missing Method Procedure",
+    "Miss. Model": "Missing Model Structure",
+    "Miss. Data": "Missing Data Specification",
+    "Miss. Config.": "Missing Configuration Protocol",
+    "Miss. Eval.": "Missing Evaluation Specification",
+    "Conf. Obj.": "Conflicting Objective",
+    "Conf. Model": "Conflicting Model Design",
+    "Conf. Formal": "Conflicting Formal Definition"
+  },
+  "legacy_display_aliases": {
+    "missing model architecture": "Missing Model Structure",
+    "ambiguous formal definition": "Ambiguous Definition"
+  }
+}

@@ -34,6 +34,8 @@ VALID_OPERATIONS = {
     "make_ambiguous",
     "introduce_conflict",
 }
+# Historical spellings are rejection rules, not supported taxonomy categories.
+# Do not replace these entries with canonical labels: that would reject valid data.
 DISALLOWED_LEVEL2 = {
     "missing objective/loss specification",
     "missing objective specification",
