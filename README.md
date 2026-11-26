@@ -15,7 +15,6 @@
   <a href="https://github.com/Yiling-Ma/IdeaAMBIG">
     <img src="docs/identity/badges/code.svg" alt="Code: GitHub">
   </a>
-  <img src="docs/identity/badges/huggingface.svg" alt="Hugging Face: TODO" title="Hugging Face dataset coming soon">
 </p>
 
 <p align="center">
