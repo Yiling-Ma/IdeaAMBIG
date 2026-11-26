@@ -11,7 +11,9 @@
   <a href="https://arxiv.org/abs/2609.10539">
     <img src="docs/identity/badges/arxiv.svg" alt="arXiv: 2609.10539">
   </a>
-  <img src="docs/identity/badges/website.svg" alt="Website: TODO" title="Project website coming soon">
+  <a href="https://yiling-ma.github.io/IdeaAMBIG-website/">
+    <img src="docs/identity/badges/website.svg" alt="Website: Homepage" title="IdeaAMBIG project website">
+  </a>
   <a href="https://github.com/Yiling-Ma/IdeaAMBIG">
     <img src="docs/identity/badges/code.svg" alt="Code: GitHub">
   </a>
