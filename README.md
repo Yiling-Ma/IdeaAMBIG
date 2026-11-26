@@ -28,10 +28,10 @@
 </p>
 
 <p align="center">
-  <img src="docs/figures/overview.png" width="85%" alt="An ambiguous MoE parameter-count definition and the three IdeaAMBIG evaluation tasks">
+  <img src="docs/figures/pipeline.png" width="100%" alt="IdeaAMBIG construction pipeline: source artifacts, instance construction, and two-stage human verification">
 </p>
 <p align="center">
-  <em><strong>From a plausible idea to a faithful implementation.</strong> Two readings of “activated parameters” imply different FFN baseline sizes. IdeaAMBIG tests readiness assessment, defect localization, and clarification action generation.</em>
+  <em><strong>Evidence-grounded construction.</strong> GitHub issues, reproducibility reports, and executed research projects yield 660 verified instances with paired NOT_READY and READY specifications.</em>
 </p>
 
 ---
@@ -89,13 +89,6 @@ Every main-benchmark instance contains one atomic, implementation-critical defec
 ## Construction Pipeline
 
 Source artifacts provide evidence for resolved real-world gaps or codification-ready references. Real-world instances reconstruct documented gaps; controlled synthetic instances alter exactly one method-defining detail in a ready reference. Primary screening and independent second review retain atomic, self-contained, evidence-supported cases.
-
-<p align="center">
-  <img src="docs/figures/pipeline.png" width="100%" alt="IdeaAMBIG construction pipeline: source artifacts, instance construction, and two-stage human verification">
-</p>
-<p align="center">
-  <em><strong>Evidence-grounded construction.</strong> GitHub issues, reproducibility reports, and executed research projects yield 660 verified instances with paired NOT_READY and READY specifications.</em>
-</p>
 
 | Construction route | Code and documentation |
 | --- | --- |
