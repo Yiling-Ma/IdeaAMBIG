@@ -3,8 +3,8 @@
 </p>
 
 <h1 align="center">
-  <img src="docs/identity/ideaambig-wordmark.svg" alt="IdeaAMBIG:" width="205" height="36" align="top"> Benchmarking Implementation-Critical Gaps<br>
-  in Research-Idea Specifications
+  <img src="docs/identity/ideaambig-wordmark.svg" alt="IdeaAMBIG:" width="205" height="36" align="top"> Benchmarking Implementation-Critical<br>
+  Gaps in Research-Idea Specifications
 </h1>
 
 <p align="center">
