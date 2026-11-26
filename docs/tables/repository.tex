@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,booktabs,array}
+\usepackage[table]{xcolor}
+\definecolor{Brick}{HTML}{AB240E}
+\definecolor{Ink}{HTML}{382F2A}
+\definecolor{Cream}{HTML}{FFF1DF}
+\definecolor{Sage}{HTML}{EEF2DE}
+\definecolor{Rule}{HTML}{B8AC94}
+\pagestyle{empty}
+\begin{document}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.45}
+\setbox0=\hbox{\begin{minipage}{210mm}
+\fontsize{11.5}{14.5}\selectfont\color{Ink}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{135.13pt}>{\raggedright\arraybackslash}p{452.38pt}@{}}
+\arrayrulecolor{Brick}\toprule[1.2pt]
+\rowcolor{Cream} \textbf{\color{Brick}Path} & \textbf{\color{Brick}Contents} \\
+\arrayrulecolor{Rule}\midrule[0.65pt]
+Data/ & Released benchmark, schema, and multi-defect ablation data \\
+\addlinespace[6pt]
+Real\_Route/ & Real-world construction from GitHub issues and reproducibility reports \\
+\addlinespace[6pt]
+Syn\_Route/ & Controlled synthetic construction from reports and ideation--execution trajectories \\
+\addlinespace[6pt]
+Evaluation/ & Task 1--3 prompting, judging, scoring, and clarification studies \\
+\addlinespace[6pt]
+docs/ & Paper figures used in this README and their source provenance \\
+\arrayrulecolor{Brick}\bottomrule[1.2pt]
+\end{tabular}
+\end{minipage}}
+\pdfpagewidth=\dimexpr\wd0+20pt\relax
+\pdfpageheight=\dimexpr\ht0+\dp0+20pt\relax
+\hoffset=-1in
+\voffset=-1in
+\shipout\hbox{\kern10pt\vbox{\kern10pt\box0\kern10pt}\kern10pt}
+\end{document}

@@ -53,15 +53,31 @@
 
 ### Three Evaluation Tasks
 
+<p align="center">
+  <a href="docs/tables/tasks.svg"><img src="docs/tables/tasks.svg" width="100%" alt="Three evaluation tasks, model inputs, outputs, and primary metrics"></a>
+</p>
+
+<details>
+<summary>View table as text</summary>
+
 | Task | Model input | Expected output | Primary metric |
 | --- | --- | --- | --- |
 | **1. Readiness Assessment** | One specification, presented independently | `READY` / `NOT_READY` and a rationale | Macro-F1 |
 | **2. Defect Localization** | An underspecified specification | The unresolved decision and its Level-1 / Level-2 labels | Macro Defect Recovery Rate (Macro DRR) |
 | **3. Clarification Action Generation** | An underspecified specification **and the annotated defect** | A targeted question or evidence-seeking action, with the information needed to resolve the gap | Macro Clarification Action Success Rate (Macro-CAS) |
 
+</details>
+
 Macro DRR requires recovery of the target blocker and both taxonomy labels. Macro-CAS requires a relevant action that requests sufficient information and avoids unsupported assumptions. Task 3 evaluates clarification formulation given a known blocker; the end-to-end variant evaluates clarification without this hint.
 
 ### Dataset Composition
+
+<p align="center">
+  <a href="docs/tables/dataset.svg"><img src="docs/tables/dataset.svg" width="100%" alt="Dataset composition: 163 real-world and 497 controlled synthetic instances"></a>
+</p>
+
+<details>
+<summary>View table as text</summary>
 
 | Subset | Source | Instances |
 | --- | --- | ---: |
@@ -73,9 +89,18 @@ Macro DRR requires recovery of the target blocker and both taxonomy labels. Macr
 | **Synthetic subtotal** | | **497** |
 | **Total** | | **660** |
 
+</details>
+
 Every main-benchmark instance contains one atomic, implementation-critical defect, its supported resolution, and a gold clarification action. See [Data/README.md](Data/README.md) for the JSONL schema and the separate two-defect ablation.
 
 ### Defect Taxonomy
+
+<p align="center">
+  <a href="docs/tables/taxonomy.svg"><img src="docs/tables/taxonomy.svg" width="100%" alt="Three defect types and ten Level-2 categories"></a>
+</p>
+
+<details>
+<summary>View table as text</summary>
 
 | Level-1 type | Level-2 categories |
 | --- | --- |
@@ -83,22 +108,40 @@ Every main-benchmark instance contains one atomic, implementation-critical defec
 | **Incompleteness** | Missing Method Procedure; Missing Model Structure; Missing Data Specification; Missing Configuration Protocol; Missing Evaluation Specification |
 | **Inconsistency** | Conflicting Objective; Conflicting Model Design; Conflicting Formal Definition |
 
+</details>
+
 ---
 
 ## Construction Pipeline
 
 Source artifacts provide evidence for resolved real-world gaps or codification-ready references. Real-world instances reconstruct documented gaps; controlled synthetic instances alter exactly one method-defining detail in a ready reference. Primary screening and independent second review retain atomic, self-contained, evidence-supported cases.
 
+<p align="center">
+  <a href="docs/tables/construction.svg"><img src="docs/tables/construction.svg" width="100%" alt="Construction routes and code documentation"></a>
+</p>
+
+<details>
+<summary>View table as text</summary>
+
 | Construction route | Code and documentation |
 | --- | --- |
 | Real-world gaps from GitHub issues and reproducibility reports | [Real_Route/](Real_Route/README.md) |
 | Controlled single-defect construction from reports and executed projects | [Syn_Route/](Syn_Route/README.md) |
+
+</details>
 
 ---
 
 ## Results
 
 ### Main Results Across 13 LLMs
+
+<p align="center">
+  <a href="docs/tables/main-results.svg"><img src="docs/tables/main-results.svg" width="100%" alt="Results for all 13 models across three tasks on real-world and synthetic subsets"></a>
+</p>
+
+<details>
+<summary>View table as text</summary>
 
 <table>
   <thead>
@@ -132,11 +175,20 @@ Source artifacts provide evidence for resolved real-world gaps or codification-r
   </tbody>
 </table>
 
+</details>
+
 <sub><em>All scores are percentages; higher is better. Bold and underline indicate the best and second-best scores. Task 1 uses 100 READY and 100 NOT_READY specifications per subset. Tasks 2 and 3 use all 163 real-world instances and a fixed sample of 200 synthetic instances.</em></sub>
 
 ### What Changes When the Blocker Is Given?
 
 With GPT-5.6-Sol on the same 163 real-world instances, providing the annotated blocker raises clarification success by **67.0 percentage points**.
+
+<p align="center">
+  <a href="docs/tables/blocker.svg"><img src="docs/tables/blocker.svg" width="100%" alt="End-to-end versus defect-guided clarification results"></a>
+</p>
+
+<details>
+<summary>View table as text</summary>
 
 | Metric | End-to-End | Defect-Guided |
 | --- | ---: | ---: |
@@ -144,9 +196,18 @@ With GPT-5.6-Sol on the same 163 real-world instances, providing the annotated b
 | Sufficiency ↑ | 8.6 | **80.4** |
 | No-Assumption ↑ | 96.3 | 95.7 |
 
+</details>
+
 ### Does Resolving the Gap Help Implementation?
 
 In the **oracle clarification study**, supplying the gold resolution raises the READY rate from **14% to 98%** on 50 real-world instances, evaluated by two human annotators blinded to the generation condition. On 20 controlled instances with bounded implementation components, oracle clarification also improves executable code:
+
+<p align="center">
+  <a href="docs/tables/implementation.svg"><img src="docs/tables/implementation.svg" width="100%" alt="Direct versus clarification-assisted implementation results"></a>
+</p>
+
+<details>
+<summary>View table as text</summary>
 
 | Metric | Direct Generation | Clarification-Assisted |
 | --- | ---: | ---: |
@@ -154,6 +215,8 @@ In the **oracle clarification study**, supplying the gold resolution raises the 
 | All Tests Pass ↑ | 45.0 | **85.0** |
 | Target Fidelity ↑ | 30.0 | **90.0** |
 | Further Clarification ↓ | 35.0 | **5.0** |
+
+</details>
 
 These utility studies supply the gold resolution and measure the benefit of successful clarification under oracle conditions.
 
@@ -219,6 +282,13 @@ See [Evaluation/README.md](Evaluation/README.md) for per-task runners, judging, 
 
 ### Repository Structure
 
+<p align="center">
+  <a href="docs/tables/repository.svg"><img src="docs/tables/repository.svg" width="100%" alt="Repository directories and contents"></a>
+</p>
+
+<details>
+<summary>View table as text</summary>
+
 | Path | Contents |
 | --- | --- |
 | [Data/](Data/README.md) | Released benchmark, schema, and multi-defect ablation data |
@@ -226,6 +296,8 @@ See [Evaluation/README.md](Evaluation/README.md) for per-task runners, judging, 
 | [Syn_Route/](Syn_Route/README.md) | Controlled synthetic construction from reports and ideation–execution trajectories |
 | [Evaluation/](Evaluation/README.md) | Task 1–3 prompting, judging, scoring, and clarification studies |
 | [docs/](docs/README.md) | Paper figures used in this README and their source provenance |
+
+</details>
 
 ---
 

@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,booktabs,array}
+\usepackage[table]{xcolor}
+\definecolor{Brick}{HTML}{AB240E}
+\definecolor{Ink}{HTML}{382F2A}
+\definecolor{Cream}{HTML}{FFF1DF}
+\definecolor{Sage}{HTML}{EEF2DE}
+\definecolor{Rule}{HTML}{B8AC94}
+\pagestyle{empty}
+\begin{document}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.45}
+\setbox0=\hbox{\begin{minipage}{210mm}
+\fontsize{11.5}{14.5}\selectfont\color{Ink}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{166.63pt}>{\raggedleft\arraybackslash}p{61.81pt}>{\raggedleft\arraybackslash}p{61.81pt}>{\raggedleft\arraybackslash}p{61.81pt}>{\raggedleft\arraybackslash}p{61.81pt}>{\raggedleft\arraybackslash}p{61.81pt}>{\raggedleft\arraybackslash}p{61.81pt}@{}}
+\arrayrulecolor{Brick}\toprule[1.2pt]
+\rowcolor{Cream} \textbf{\color{Brick}Model} & \multicolumn{2}{c}{\textbf{\color{Brick}Task 1: Macro-F1 $\uparrow$}} & \multicolumn{2}{c}{\textbf{\color{Brick}Task 2: Macro DRR $\uparrow$}} & \multicolumn{2}{c}{\textbf{\color{Brick}Task 3: Macro-CAS $\uparrow$}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+\rowcolor{Cream} & Real & Synth. & Real & Synth. & Real & Synth. \\
+\arrayrulecolor{Rule}\midrule[0.65pt]
+\rowcolor{Cream} \multicolumn{7}{l}{\color{Brick}\textit{Frontier proprietary models}} \\
+\rowcolor{Sage}
+GPT-5.6-Sol & \textbf{67.5} & \textbf{86.4} & \textbf{9.6} & \textbf{12.2} & \textbf{80.6} & \textbf{96.2} \\
+Claude Sonnet 5 & \underline{59.3} & \underline{76.2} & \underline{6.8} & \underline{11.4} & \underline{76.8} & \underline{94.5} \\
+Gemini 3.1 Pro Preview & 45.8 & 67.3 & 3.4 & 7.6 & 68.9 & 91.6 \\
+DeepSeek-V3.2 & 44.5 & 67.2 & 5.9 & 8.0 & 62.9 & 93.0 \\
+\addlinespace[5pt]
+\rowcolor{Cream} \multicolumn{7}{l}{\color{Brick}\textit{Open-weight reasoning models}} \\
+Qwen3.5-397B-A17B & 57.5 & 55.9 & 3.3 & 4.6 & 72.0 & 89.0 \\
+GLM-5.2 & 45.1 & 65.9 & 5.7 & 7.0 & 63.6 & 77.0 \\
+DeepSeek-R1-0528 & 44.3 & 59.9 & 1.8 & 2.2 & 68.0 & 68.5 \\
+Kimi-K3 & 32.7 & 43.1 & 6.6 & 8.2 & 60.6 & 92.5 \\
+\addlinespace[5pt]
+\rowcolor{Cream} \multicolumn{7}{l}{\color{Brick}\textit{Open-weight general models}} \\
+Gemma-4-31B-IT & 47.1 & 56.9 & 4.7 & 7.0 & 67.7 & 73.0 \\
+Qwen3-8B & 40.1 & 48.7 & 3.2 & 4.6 & 53.8 & 82.6 \\
+Qwen3-32B & 34.5 & 37.0 & 3.6 & 5.8 & 61.9 & 76.3 \\
+Qwen3.5-9B & 33.3 & 54.3 & 5.3 & 5.5 & 64.6 & 81.2 \\
+GPT-OSS-120B & 30.0 & 44.4 & 2.5 & 3.3 & 53.4 & 65.3 \\
+\arrayrulecolor{Brick}\bottomrule[1.2pt]
+\end{tabular}
+\end{minipage}}
+\pdfpagewidth=\dimexpr\wd0+20pt\relax
+\pdfpageheight=\dimexpr\ht0+\dp0+20pt\relax
+\hoffset=-1in
+\voffset=-1in
+\shipout\hbox{\kern10pt\vbox{\kern10pt\box0\kern10pt}\kern10pt}
+\end{document}

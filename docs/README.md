@@ -1,4 +1,20 @@
-# README Figures
+# README Artwork
+
+## Tables
+
+All eight README tables are typeset with LaTeX, Latin Modern, and `booktabs`.
+Brick-red rules and headers, warm cream section bands, and pale olive highlights
+follow the project palette. The exported SVGs use outlined glyphs and a white
+background to remain readable in GitHub's light and dark themes.
+
+Each table retains its original, copyable text in the README's expandable
+"View table as text" section. Directory links are available there as well.
+`tables/tables.json` contains the table data, and `tables/*.tex` contains the
+generated LaTeX sources. To rebuild the SVGs with a TeX distribution and Poppler:
+
+```bash
+python3 docs/render_tables.py
+```
 
 ## Visual Identity
 
