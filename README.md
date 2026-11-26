@@ -8,15 +8,9 @@
 </h1>
 
 <p align="center">
-  <a href="https://arxiv.org/abs/2609.10539">
-    <img src="docs/identity/badges/arxiv.svg" alt="arXiv: 2609.10539">
-  </a>
-  <a href="https://yiling-ma.github.io/IdeaAMBIG-website/">
-    <img src="docs/identity/badges/website.svg" alt="Website: Homepage" title="IdeaAMBIG project website">
-  </a>
-  <a href="https://github.com/Yiling-Ma/IdeaAMBIG">
-    <img src="docs/identity/badges/code.svg" alt="Code: GitHub">
-  </a>
+  <a href="https://arxiv.org/abs/2609.10539"><img src="docs/identity/badges/arxiv.svg" alt="arXiv: 2609.10539"></a>
+  <a href="https://yiling-ma.github.io/IdeaAMBIG-website/"><img src="docs/identity/badges/website.svg" alt="Website: Homepage" title="IdeaAMBIG project website"></a>
+  <a href="https://github.com/Yiling-Ma/IdeaAMBIG"><img src="docs/identity/badges/code.svg" alt="Code: GitHub"></a>
 </p>
 
 <p align="center">
