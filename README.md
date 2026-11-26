@@ -1,110 +1,249 @@
-# IdeaAmbig
+<h1 align="center">
+  IdeaAMBIG: Benchmarking Implementation-Critical Gaps<br>
+  in Research-Idea Specifications
+</h1>
 
-Code accompanying the anonymous ACL submission **"IdeaAMBIG: Benchmarking
-Implementation-Critical Gaps in Research-Idea Specifications."**
+<p align="center">
+  Yiling Ma<sup>1</sup>, <a href="mailto:yilun.zhao@yale.edu">Yilun Zhao</a><sup>1,&dagger;</sup>,
+  Sihong Wu<sup>2</sup>, Manasi Patwardhan<sup>3</sup>, Arman Cohan<sup>1</sup><br>
+  <sup>1</sup> Yale University &nbsp;&middot;&nbsp;
+  <sup>2</sup> University of Maryland, College Park &nbsp;&middot;&nbsp;
+  <sup>3</sup> TCS Research<br>
+  <sup>&dagger;</sup> Corresponding author
+</p>
 
-IdeaAMBIG evaluates whether a research-idea specification is *codification-ready*
-— whether a competent implementer or coding agent could build a faithful
-initial implementation without inventing unsupported assumptions about the
-core method — through three tasks: **Readiness Assessment**, **Defect
-Localization**, and **Clarification Action Generation**. The benchmark
-contains 660 evidence-grounded, single-defect instances (163 real-world +
-497 controlled synthetic; Table 3), each pairing an underspecified `NOT_READY`
-specification with a `READY` counterpart, a labeled target defect, and a gold
-clarification action.
+<p align="center">
+  <a href="https://github.com/Yiling-Ma/-ARR-Aug--AmbIdea/blob/main/acl_latex.tex"><img src="https://img.shields.io/badge/Paper-LaTeX_Source-7C3AED?style=flat&amp;logo=overleaf&amp;logoColor=white" alt="Latest paper source"></a>
+  <a href="Data/"><img src="https://img.shields.io/badge/Dataset-660_Instances-2563EB?style=flat&amp;logo=databricks&amp;logoColor=white" alt="Dataset: 660 instances"></a>
+  <a href="Evaluation/"><img src="https://img.shields.io/badge/Evaluation-3_Tasks-788B4B?style=flat&amp;logo=python&amp;logoColor=white" alt="Evaluation: three tasks"></a>
+</p>
 
-This repository contains the **public construction code, evaluation code, and
-the released benchmark dataset**. It does not include cached LLM outputs,
-PDFs, or other large intermediate construction artifacts — see each
-subdirectory's `.gitignore`.
+<p align="center">
+  <a href="#overview">Overview</a> &nbsp;&middot;&nbsp;
+  <a href="#benchmark">Benchmark</a> &nbsp;&middot;&nbsp;
+  <a href="#construction-pipeline">Construction</a> &nbsp;&middot;&nbsp;
+  <a href="#results">Results</a> &nbsp;&middot;&nbsp;
+  <a href="#quick-start">Quick Start</a> &nbsp;&middot;&nbsp;
+  <a href="#citation">Citation</a>
+</p>
 
-## Repository layout
+<p align="center">
+  <img src="docs/figures/overview.png" width="85%" alt="An ambiguous MoE parameter-count definition and the three IdeaAMBIG evaluation tasks">
+</p>
+<p align="center">
+  <em><strong>From a plausible idea to a faithful implementation.</strong> Two readings of “activated parameters” imply different FFN baseline sizes. IdeaAMBIG tests readiness assessment, defect localization, and clarification action generation.</em>
+</p>
 
-```
-ARR_codes/
-├── Data/               The 660 released benchmark instances (163 real-world + 497 controlled synthetic)
-├── Real_Route/          Real-world gap construction (GitHub issues + reproducibility reports) → 163 instances
-├── Syn_Route/          Controlled synthetic-defect construction → 497 instances
-└── Evaluation/         Task 1/2/3 evaluation pipeline (prompting, judging, scoring)
-```
+---
 
-Each subdirectory has its own README with step-by-step usage:
+## Overview
 
-- [`Data/README.md`](Data/README.md) — the released benchmark files and their schema.
-- [`Real_Route/README.md`](Real_Route/README.md) — real-world instance
-  construction from GitHub issues and reproducibility reports.
-- [`Syn_Route/README.md`](Syn_Route/README.md) — controlled synthetic-defect
-  construction from reproducibility reports and AI-Researcher
-  ideation–execution trajectories.
-- [`Evaluation/README.md`](Evaluation/README.md) — running the 13 evaluated
-  LLMs on Tasks 1–3, LLM-judge scoring, the Table 9 information-bottleneck
-  ablation, and the Table 2 oracle clarification-utility study.
+**IdeaAMBIG** benchmarks **codification readiness**: whether a research-method specification provides enough information for a faithful initial implementation without unsupported assumptions about the core method.
 
-## Data construction pipeline (overview)
+- **660 evidence-grounded instances**: 163 real-world gaps and 497 controlled synthetic gaps.
+- **Paired specifications**: each instance includes a `NOT_READY` specification and a `READY` counterpart that resolves only its target defect.
+- **Three diagnostic tasks**: readiness assessment, defect localization, and clarification action generation.
+- **A shared taxonomy**: 3 defect types and 10 categories across 10 research domains.
+- **13 evaluated LLMs**: proprietary and open-weight models, with separate real-world and synthetic results.
 
-```
-                 ┌───────────── Real Gaps ─────────────┐   ┌────── Synthetic Gaps ──────┐
-                 │                                      │   │                            │
-        GitHub Issues                        Reproducibility Reports         AI-Researcher Execution Study
-   (Real_Route/github_issue/)                  (Real_Route/step_01–07)         (Syn_Route/execution_study/)
-                 │                                      │   │                            │
-                 ▼                                      ▼   ▼                            ▼
-          resolved real gap              resolved real gap / synthetic-controlled   codification-ready
-          (42 instances)                  (121 instances)   / unusable               reference + 5 candidate
-                                                                  │                    defect injections
-                                                                  ▼                    (139 instances)
-                                                    Syn_Route/reproducibility/
-                                                       (358 instances)
-```
+**The central finding:** discovering the implementation blocker is harder than formulating a clarification once it is known. The strongest evaluated model reaches **9.6% Macro DRR** on real-world defect localization, versus **80.6% Macro-CAS** when clarification is guided by the annotated blocker.
 
-Both real and synthetic tracks share the same **3 Level-1 defect types**
-(Ambiguity, Incompleteness, Inconsistency) and **10 Level-2 categories**,
-defined in `Real_Route/github_issue/taxonomy_utils.py` and mirrored across
-`Syn_Route/`:
+---
 
-| Level-1 | Level-2 categories |
-|---|---|
-| Ambiguity | Ambiguous Definition, Ambiguous Procedure |
-| Incompleteness | Missing Method Procedure, Missing Configuration Protocol, Missing Model Structure, Missing Evaluation Specification, Missing Data Specification |
-| Inconsistency | Conflicting Objective, Conflicting Model Design, Conflicting Formal Definition |
+## Benchmark
 
-All construction paths apply the same two-stage human verification protocol
-(primary screen + independent second review of retained/uncertain cases) and
-enforce that each retained instance isolates exactly one atomic,
-evidence-supported, implementation-critical defect.
+### Three Evaluation Tasks
 
-## Evaluation
+| Task | Model input | Expected output | Primary metric |
+| --- | --- | --- | --- |
+| **1. Readiness Assessment** | One specification, presented independently | `READY` / `NOT_READY` and a rationale | Macro-F1 |
+| **2. Defect Localization** | An underspecified specification | The unresolved decision and its Level-1 / Level-2 labels | Macro Defect Recovery Rate (Macro DRR) |
+| **3. Clarification Action Generation** | An underspecified specification **and the annotated defect** | A targeted question or evidence-seeking action, with the information needed to resolve the gap | Macro Clarification Action Success Rate (Macro-CAS) |
 
-`Evaluation/` runs 13 LLMs (accessed via OpenRouter) on the three benchmark
-tasks and reports the paper's primary metrics: Macro-F1 (Task 1 readiness
-assessment), Macro Defect Recovery Rate (Task 2 defect localization), and
-Macro Clarification Action Success Rate (Task 3 clarification generation).
-Semantic and rubric-based judging for the three benchmark tasks uses
-`anthropic/claude-opus-4.8`. The oracle clarification-utility study reports
-ratings from two independent human annotators blinded to the generation
-condition; its optional automated diagnostic is documented separately. See
-[`Evaluation/README.md`](Evaluation/README.md) for exact commands, including
-the Table 9 end-to-end vs. defect-guided ablation and the Table 2 oracle
-clarification-utility study.
+Macro DRR requires recovery of the target blocker and both taxonomy labels. Macro-CAS requires a relevant action that requests sufficient information and avoids unsupported assumptions. Task 3 evaluates clarification formulation given a known blocker; the end-to-end variant evaluates clarification without this hint.
 
-## Setup
+### Dataset Composition
 
-Each subdirectory is a standalone Python 3 project (no top-level
-`requirements.txt` is provided; install packages as import errors surface —
-common dependencies include `requests`, `tqdm`, `beautifulsoup4`, `pymupdf`,
-and `gdown`). Scripts that call an LLM provider read credentials from
-environment variables, e.g.:
+| Subset | Source | Instances |
+| --- | --- | ---: |
+| Real-world | GitHub issues | 121 |
+| Real-world | Reproducibility reports | 42 |
+| **Real-world subtotal** | | **163** |
+| Controlled synthetic | Reproducibility reports | 358 |
+| Controlled synthetic | Ideation–execution trajectories | 139 |
+| **Synthetic subtotal** | | **497** |
+| **Total** | | **660** |
+
+Every main-benchmark instance contains one atomic, implementation-critical defect, its supported resolution, and a gold clarification action. See [Data/README.md](Data/README.md) for the JSONL schema and the separate two-defect ablation.
+
+### Defect Taxonomy
+
+| Level-1 type | Level-2 categories |
+| --- | --- |
+| **Ambiguity** | Ambiguous Definition; Ambiguous Procedure |
+| **Incompleteness** | Missing Method Procedure; Missing Model Structure; Missing Data Specification; Missing Configuration Protocol; Missing Evaluation Specification |
+| **Inconsistency** | Conflicting Objective; Conflicting Model Design; Conflicting Formal Definition |
+
+---
+
+## Construction Pipeline
+
+Source artifacts provide evidence for resolved real-world gaps or codification-ready references. Real-world instances reconstruct documented gaps; controlled synthetic instances alter exactly one method-defining detail in a ready reference. Primary screening and independent second review retain atomic, self-contained, evidence-supported cases.
+
+<p align="center">
+  <img src="docs/figures/pipeline.png" width="100%" alt="IdeaAMBIG construction pipeline: source artifacts, instance construction, and two-stage human verification">
+</p>
+<p align="center">
+  <em><strong>Evidence-grounded construction.</strong> GitHub issues, reproducibility reports, and executed research projects yield 660 verified instances with paired NOT_READY and READY specifications.</em>
+</p>
+
+| Construction route | Code and documentation |
+| --- | --- |
+| Real-world gaps from GitHub issues and reproducibility reports | [Real_Route/](Real_Route/README.md) |
+| Controlled single-defect construction from reports and executed projects | [Syn_Route/](Syn_Route/README.md) |
+
+---
+
+## Results
+
+### Main Results Across 13 LLMs
+
+<table>
+  <thead>
+    <tr>
+      <th rowspan="2" align="left">Model</th>
+      <th colspan="2" align="center">Task 1: Macro-F1 ↑</th>
+      <th colspan="2" align="center">Task 2: Macro DRR ↑</th>
+      <th colspan="2" align="center">Task 3: Macro-CAS ↑</th>
+    </tr>
+    <tr>
+      <th>Real</th><th>Synth.</th><th>Real</th><th>Synth.</th><th>Real</th><th>Synth.</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td colspan="7"><em>Frontier proprietary models</em></td></tr>
+    <tr><td>GPT-5.6-Sol</td><td><strong>67.5</strong></td><td><strong>86.4</strong></td><td><strong>9.6</strong></td><td><strong>12.2</strong></td><td><strong>80.6</strong></td><td><strong>96.2</strong></td></tr>
+    <tr><td>Claude Sonnet 5</td><td><u>59.3</u></td><td><u>76.2</u></td><td><u>6.8</u></td><td><u>11.4</u></td><td><u>76.8</u></td><td><u>94.5</u></td></tr>
+    <tr><td>Gemini 3.1 Pro Preview</td><td>45.8</td><td>67.3</td><td>3.4</td><td>7.6</td><td>68.9</td><td>91.6</td></tr>
+    <tr><td>DeepSeek-V3.2</td><td>44.5</td><td>67.2</td><td>5.9</td><td>8.0</td><td>62.9</td><td>93.0</td></tr>
+    <tr><td colspan="7"><em>Open-weight reasoning models</em></td></tr>
+    <tr><td>Qwen3.5-397B-A17B</td><td>57.5</td><td>55.9</td><td>3.3</td><td>4.6</td><td>72.0</td><td>89.0</td></tr>
+    <tr><td>GLM-5.2</td><td>45.1</td><td>65.9</td><td>5.7</td><td>7.0</td><td>63.6</td><td>77.0</td></tr>
+    <tr><td>DeepSeek-R1-0528</td><td>44.3</td><td>59.9</td><td>1.8</td><td>2.2</td><td>68.0</td><td>68.5</td></tr>
+    <tr><td>Kimi-K3</td><td>32.7</td><td>43.1</td><td>6.6</td><td>8.2</td><td>60.6</td><td>92.5</td></tr>
+    <tr><td colspan="7"><em>Open-weight general models</em></td></tr>
+    <tr><td>Gemma-4-31B-IT</td><td>47.1</td><td>56.9</td><td>4.7</td><td>7.0</td><td>67.7</td><td>73.0</td></tr>
+    <tr><td>Qwen3-8B</td><td>40.1</td><td>48.7</td><td>3.2</td><td>4.6</td><td>53.8</td><td>82.6</td></tr>
+    <tr><td>Qwen3-32B</td><td>34.5</td><td>37.0</td><td>3.6</td><td>5.8</td><td>61.9</td><td>76.3</td></tr>
+    <tr><td>Qwen3.5-9B</td><td>33.3</td><td>54.3</td><td>5.3</td><td>5.5</td><td>64.6</td><td>81.2</td></tr>
+    <tr><td>GPT-OSS-120B</td><td>30.0</td><td>44.4</td><td>2.5</td><td>3.3</td><td>53.4</td><td>65.3</td></tr>
+  </tbody>
+</table>
+
+<sub><em>All scores are percentages; higher is better. Bold and underline indicate the best and second-best scores. Task 1 uses 100 READY and 100 NOT_READY specifications per subset. Tasks 2 and 3 use all 163 real-world instances and a fixed sample of 200 synthetic instances.</em></sub>
+
+### What Changes When the Blocker Is Given?
+
+With GPT-5.6-Sol on the same 163 real-world instances, providing the annotated blocker raises clarification success by **67.0 percentage points**.
+
+| Metric | End-to-End | Defect-Guided |
+| --- | ---: | ---: |
+| Macro-CAS ↑ | 13.6 | **80.6** |
+| Sufficiency ↑ | 8.6 | **80.4** |
+| No-Assumption ↑ | 96.3 | 95.7 |
+
+### Does Resolving the Gap Help Implementation?
+
+In the **oracle clarification study**, supplying the gold resolution raises the READY rate from **14% to 98%** on 50 real-world instances, evaluated by two human annotators blinded to the generation condition. On 20 controlled instances with bounded implementation components, oracle clarification also improves executable code:
+
+| Metric | Direct Generation | Clarification-Assisted |
+| --- | ---: | ---: |
+| Runnable ↑ | 70.0 | **95.0** |
+| All Tests Pass ↑ | 45.0 | **85.0** |
+| Target Fidelity ↑ | 30.0 | **90.0** |
+| Further Clarification ↓ | 35.0 | **5.0** |
+
+These utility studies supply the gold resolution and measure the benefit of successful clarification under oracle conditions.
+
+---
+
+## Quick Start
+
+### 1. Get the Dataset
 
 ```bash
-export OPENROUTER_API_KEY="..."
-export OPENROUTER_BASE_URL="https://openrouter.ai/api/v1"
+git clone https://github.com/Yiling-Ma/IdeaAMBIG.git
+cd IdeaAMBIG
 ```
 
-No credentials, personal paths, or author-identifying information are
-included in this release.
+Read the released JSONL files with Python 3; no extra packages are needed:
 
-## License and anonymity
+```python
+import json
+from pathlib import Path
 
-This is an anonymous submission repository. Please do not include information
-that could reveal author identity in issues, commits, or forks of this
-repository during the review period.
+def load_jsonl(path):
+    return [json.loads(line) for line in Path(path).read_text().splitlines() if line.strip()]
+
+real = load_jsonl("Data/real_benchmark_instance.jsonl")
+synthetic = load_jsonl("Data/syn_benchmark_instance.jsonl")
+print(f"Real: {len(real)} | Synthetic: {len(synthetic)}")
+
+case = real[0]
+print(case["input"]["underspecified_spec"])
+print(case["defects"][0])
+print(case["expected_clarification_actions"])
+```
+
+### 2. Build a Task 1 Evaluation Pool
+
+This example builds a pool from the real-world release and separates model-visible inputs from gold annotations:
+
+```bash
+python3 Evaluation/task1/build_evaluation_pool.py \
+  --input Data/real_benchmark_instance.jsonl \
+  --output-dir /tmp/ideaambig-task1
+```
+
+This creates `evaluation_pool.jsonl`, `evaluation_gold.jsonl`, and `evaluation_manifest.json`. The pool includes all underspecified inputs and deduplicated ready references; the paper's balanced Task 1 evaluation uses 100 specifications per class and subset.
+
+### 3. Run a Model
+
+```bash
+python3 -m pip install tqdm
+export OPENROUTER_API_KEY="YOUR_API_KEY"
+export OPENROUTER_BASE_URL="https://openrouter.ai/api/v1"
+
+python3 Evaluation/task1/run_baselines_openrouter.py \
+  --pool /tmp/ideaambig-task1/evaluation_pool.jsonl \
+  --gold /tmp/ideaambig-task1/evaluation_gold.jsonl \
+  --models openai/gpt-5.6-sol \
+  --prompt-version v3 \
+  --subset real \
+  --workers 4
+```
+
+See [Evaluation/README.md](Evaluation/README.md) for per-task runners, judging, scoring, and clarification ablations. Construction routes have their own dependencies and usage instructions.
+
+### Repository Structure
+
+| Path | Contents |
+| --- | --- |
+| [Data/](Data/README.md) | Released benchmark, schema, and multi-defect ablation data |
+| [Real_Route/](Real_Route/README.md) | Real-world construction from GitHub issues and reproducibility reports |
+| [Syn_Route/](Syn_Route/README.md) | Controlled synthetic construction from reports and ideation–execution trajectories |
+| [Evaluation/](Evaluation/README.md) | Task 1–3 prompting, judging, scoring, and clarification studies |
+| [docs/](docs/README.md) | Paper figures used in this README and their source provenance |
+
+---
+
+## Citation
+
+```bibtex
+@misc{ma2026ideaambig,
+  title  = {IdeaAMBIG: Benchmarking Implementation-Critical Gaps in Research-Idea Specifications},
+  author = {Ma, Yiling and Zhao, Yilun and Wu, Sihong and Patwardhan, Manasi and Cohan, Arman},
+  year   = {2026},
+  url    = {https://github.com/Yiling-Ma/IdeaAMBIG}
+}
+```
