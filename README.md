@@ -9,13 +9,13 @@
 
 <p align="center">
   <a href="https://arxiv.org/abs/2609.10539">
-    <img src="https://img.shields.io/badge/arXiv-2609.10539-AB240E?style=flat-square&amp;logo=arxiv&amp;logoColor=white" alt="arXiv: 2609.10539">
+    <img src="docs/identity/badges/arxiv.svg" alt="arXiv: 2609.10539">
   </a>
-  <img src="https://img.shields.io/badge/Website-TODO-F8832B?style=flat-square&amp;logo=googlechrome&amp;logoColor=white" alt="Website: TODO" title="Project website coming soon">
+  <img src="docs/identity/badges/website.svg" alt="Website: TODO" title="Project website coming soon">
   <a href="https://github.com/Yiling-Ma/IdeaAMBIG">
-    <img src="https://img.shields.io/badge/Code-GitHub-B5C17D?style=flat-square&amp;logo=github&amp;logoColor=white" alt="Code: GitHub">
+    <img src="docs/identity/badges/code.svg" alt="Code: GitHub">
   </a>
-  <img src="https://img.shields.io/badge/Hugging_Face-TODO-BCDAEB?style=flat-square&amp;logo=huggingface&amp;logoColor=FFD21E" alt="Hugging Face: TODO" title="Hugging Face dataset coming soon">
+  <img src="docs/identity/badges/huggingface.svg" alt="Hugging Face: TODO" title="Hugging Face dataset coming soon">
 </p>
 
 <p align="center">
