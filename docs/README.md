@@ -1,5 +1,19 @@
 # README Figures
 
+## Visual Identity
+
+`identity/ideaambig-logo.svg` is an original vector mark: a letter A with a
+deliberate gap, a detached blue completion piece, and an olive crossbar.
+The design represents an implementation-critical gap and the clarification
+needed to complete a specification. `identity/ideaambig-wordmark.svg` provides
+the colored project name in GitHub's README heading.
+
+The palette uses brick red (`#AB240E`), vermilion (`#ED4513`), orange
+(`#F8832B`), olive (`#B5C17D`), and powder blue (`#BCDAEB`). Both assets
+have transparent backgrounds for GitHub's light and dark themes.
+
+## Paper Figures
+
 These images are rendered from the paper's figure PDFs in
 [Yiling-Ma/-ARR-Aug--AmbIdea](https://github.com/Yiling-Ma/-ARR-Aug--AmbIdea),
 at commit `30519dda90aa33acbc46e82d36382be0834c2129`.

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="220" viewBox="0 0 240 220" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">IdeaAMBIG logo</title>
+  <desc id="desc">A sculpted letter A with a deliberate gap, a blue missing piece, and an olive bridge connecting the specification.</desc>
+  <path d="M28 186 88 42C91 35 97 31 105 31H137L76 176C73 182 68 186 61 186H28Z" fill="#AB240E"/>
+  <path d="M105 31H137L164 95H119L97 43C94 36 98 31 105 31Z" fill="#F8832B"/>
+  <path d="m132 126 44 0 25 60h-38c-7 0-12-4-15-10l-16-50Z" fill="#ED4513"/>
+  <path d="M88 133h47l11 26H77l11-26Z" fill="#B5C17D"/>
+  <path d="m145 91 44 0 11 26h-44l-11-26Z" fill="#BCDAEB"/>
+  <path d="m145 91 11 26h-12l-11-26h12Z" fill="#91B6C8"/>
+</svg>

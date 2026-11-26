@@ -1,21 +1,21 @@
+<p align="center">
+  <img src="docs/identity/ideaambig-logo.svg" alt="IdeaAMBIG logo: a specification gap and its missing piece" width="180">
+</p>
+
 <h1 align="center">
-  IdeaAMBIG: Benchmarking Implementation-Critical Gaps<br>
+  <img src="docs/identity/ideaambig-wordmark.svg" alt="IdeaAMBIG:" width="205" height="36" align="top"> Benchmarking Implementation-Critical Gaps<br>
   in Research-Idea Specifications
 </h1>
 
 <p align="center">
-  Yiling Ma<sup>1</sup>, <a href="mailto:yilun.zhao@yale.edu">Yilun Zhao</a><sup>1,&dagger;</sup>,
-  Sihong Wu<sup>2</sup>, Manasi Patwardhan<sup>3</sup>, Arman Cohan<sup>1</sup><br>
-  <sup>1</sup> Yale University &nbsp;&middot;&nbsp;
-  <sup>2</sup> University of Maryland, College Park &nbsp;&middot;&nbsp;
-  <sup>3</sup> TCS Research<br>
-  <sup>&dagger;</sup> Corresponding author
-</p>
-
-<p align="center">
-  <a href="https://github.com/Yiling-Ma/-ARR-Aug--AmbIdea/blob/main/acl_latex.tex"><img src="https://img.shields.io/badge/Paper-LaTeX_Source-7C3AED?style=flat&amp;logo=overleaf&amp;logoColor=white" alt="Latest paper source"></a>
-  <a href="Data/"><img src="https://img.shields.io/badge/Dataset-660_Instances-2563EB?style=flat&amp;logo=databricks&amp;logoColor=white" alt="Dataset: 660 instances"></a>
-  <a href="Evaluation/"><img src="https://img.shields.io/badge/Evaluation-3_Tasks-788B4B?style=flat&amp;logo=python&amp;logoColor=white" alt="Evaluation: three tasks"></a>
+  <a href="https://arxiv.org/abs/2609.10539">
+    <img src="https://img.shields.io/badge/arXiv-2609.10539-AB240E?style=flat-square&amp;logo=arxiv&amp;logoColor=white" alt="arXiv: 2609.10539">
+  </a>
+  <img src="https://img.shields.io/badge/Website-TODO-F8832B?style=flat-square&amp;logo=googlechrome&amp;logoColor=white" alt="Website: TODO" title="Project website coming soon">
+  <a href="https://github.com/Yiling-Ma/IdeaAMBIG">
+    <img src="https://img.shields.io/badge/Code-GitHub-B5C17D?style=flat-square&amp;logo=github&amp;logoColor=white" alt="Code: GitHub">
+  </a>
+  <img src="https://img.shields.io/badge/Hugging_Face-TODO-BCDAEB?style=flat-square&amp;logo=huggingface&amp;logoColor=FFD21E" alt="Hugging Face: TODO" title="Hugging Face dataset coming soon">
 </p>
 
 <p align="center">
@@ -240,10 +240,11 @@ See [Evaluation/README.md](Evaluation/README.md) for per-task runners, judging, 
 ## Citation
 
 ```bibtex
-@misc{ma2026ideaambig,
+@article{ma2026ideaambig,
   title  = {IdeaAMBIG: Benchmarking Implementation-Critical Gaps in Research-Idea Specifications},
   author = {Ma, Yiling and Zhao, Yilun and Wu, Sihong and Patwardhan, Manasi and Cohan, Arman},
   year   = {2026},
-  url    = {https://github.com/Yiling-Ma/IdeaAMBIG}
+  journal = {arXiv preprint arXiv:2609.10539},
+  url    = {https://arxiv.org/abs/2609.10539}
 }
 ```
