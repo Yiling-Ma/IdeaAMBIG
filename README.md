@@ -53,31 +53,15 @@
 
 ### Three Evaluation Tasks
 
-<p align="center">
-  <a href="docs/tables/tasks.svg"><img src="docs/tables/tasks.svg" width="100%" alt="Three evaluation tasks, model inputs, outputs, and primary metrics"></a>
-</p>
-
-<details>
-<summary>View table as text</summary>
-
-| Task | Model input | Expected output | Primary metric |
+| Task | Input | Output | Metric |
 | --- | --- | --- | --- |
-| **1. Readiness Assessment** | One specification, presented independently | `READY` / `NOT_READY` and a rationale | Macro-F1 |
-| **2. Defect Localization** | An underspecified specification | The unresolved decision and its Level-1 / Level-2 labels | Macro Defect Recovery Rate (Macro DRR) |
-| **3. Clarification Action Generation** | An underspecified specification **and the annotated defect** | A targeted question or evidence-seeking action, with the information needed to resolve the gap | Macro Clarification Action Success Rate (Macro-CAS) |
-
-</details>
+| **1 · Readiness Assessment** | One specification | `READY` / `NOT_READY` + rationale | Macro-F1 |
+| **2 · Defect Localization** | Underspecified specification | Target blocker + taxonomy labels | Macro DRR |
+| **3 · Clarification Generation** | Specification + **annotated defect** | Question or evidence-seeking action + required information | Macro-CAS |
 
 Macro DRR requires recovery of the target blocker and both taxonomy labels. Macro-CAS requires a relevant action that requests sufficient information and avoids unsupported assumptions. Task 3 evaluates clarification formulation given a known blocker; the end-to-end variant evaluates clarification without this hint.
 
 ### Dataset Composition
-
-<p align="center">
-  <a href="docs/tables/dataset.svg"><img src="docs/tables/dataset.svg" width="100%" alt="Dataset composition: 163 real-world and 497 controlled synthetic instances"></a>
-</p>
-
-<details>
-<summary>View table as text</summary>
 
 | Subset | Source | Instances |
 | --- | --- | ---: |
@@ -89,26 +73,22 @@ Macro DRR requires recovery of the target blocker and both taxonomy labels. Macr
 | **Synthetic subtotal** | | **497** |
 | **Total** | | **660** |
 
-</details>
-
 Every main-benchmark instance contains one atomic, implementation-critical defect, its supported resolution, and a gold clarification action. See [Data/README.md](Data/README.md) for the JSONL schema and the separate two-defect ablation.
 
 ### Defect Taxonomy
 
-<p align="center">
-  <a href="docs/tables/taxonomy.svg"><img src="docs/tables/taxonomy.svg" width="100%" alt="Three defect types and ten Level-2 categories"></a>
-</p>
-
-<details>
-<summary>View table as text</summary>
-
-| Level-1 type | Level-2 categories |
+| Defect type | Category |
 | --- | --- |
-| **Ambiguity** | Ambiguous Definition; Ambiguous Procedure |
-| **Incompleteness** | Missing Method Procedure; Missing Model Structure; Missing Data Specification; Missing Configuration Protocol; Missing Evaluation Specification |
-| **Inconsistency** | Conflicting Objective; Conflicting Model Design; Conflicting Formal Definition |
-
-</details>
+| **Ambiguity** | Ambiguous Definition |
+|  | Ambiguous Procedure |
+| **Incompleteness** | Missing Method Procedure |
+|  | Missing Model Structure |
+|  | Missing Data Specification |
+|  | Missing Configuration Protocol |
+|  | Missing Evaluation Specification |
+| **Inconsistency** | Conflicting Objective |
+|  | Conflicting Model Design |
+|  | Conflicting Formal Definition |
 
 ---
 
@@ -116,19 +96,10 @@ Every main-benchmark instance contains one atomic, implementation-critical defec
 
 Source artifacts provide evidence for resolved real-world gaps or codification-ready references. Real-world instances reconstruct documented gaps; controlled synthetic instances alter exactly one method-defining detail in a ready reference. Primary screening and independent second review retain atomic, self-contained, evidence-supported cases.
 
-<p align="center">
-  <a href="docs/tables/construction.svg"><img src="docs/tables/construction.svg" width="100%" alt="Construction routes and code documentation"></a>
-</p>
-
-<details>
-<summary>View table as text</summary>
-
-| Construction route | Code and documentation |
-| --- | --- |
-| Real-world gaps from GitHub issues and reproducibility reports | [Real_Route/](Real_Route/README.md) |
-| Controlled single-defect construction from reports and executed projects | [Syn_Route/](Syn_Route/README.md) |
-
-</details>
+| Route | Sources | Documentation |
+| --- | --- | --- |
+| **Real-world** | GitHub issues and reproducibility reports | [Real_Route](Real_Route/README.md) |
+| **Controlled synthetic** | Reproducibility reports and executed projects | [Syn_Route](Syn_Route/README.md) |
 
 ---
 
@@ -136,78 +107,63 @@ Source artifacts provide evidence for resolved real-world gaps or codification-r
 
 ### Main Results Across 13 LLMs
 
-<p align="center">
-  <a href="docs/tables/main-results.svg"><img src="docs/tables/main-results.svg" width="100%" alt="Results for all 13 models across three tasks on real-world and synthetic subsets"></a>
-</p>
+#### Real-world
 
-<details>
-<summary>View table as text</summary>
+| Model | Readiness ↑ | Localization ↑ | Clarification ↑ |
+| --- | ---: | ---: | ---: |
+| *Frontier proprietary models* |  |  |  |
+| GPT-5.6-Sol | **67.5** | **9.6** | **80.6** |
+| Claude Sonnet 5 | *59.3* | *6.8* | *76.8* |
+| Gemini 3.1 Pro Preview | 45.8 | 3.4 | 68.9 |
+| DeepSeek-V3.2 | 44.5 | 5.9 | 62.9 |
+| *Open-weight reasoning models* |  |  |  |
+| Qwen3.5-397B-A17B | 57.5 | 3.3 | 72.0 |
+| GLM-5.2 | 45.1 | 5.7 | 63.6 |
+| DeepSeek-R1-0528 | 44.3 | 1.8 | 68.0 |
+| Kimi-K3 | 32.7 | 6.6 | 60.6 |
+| *Open-weight general models* |  |  |  |
+| Gemma-4-31B-IT | 47.1 | 4.7 | 67.7 |
+| Qwen3-8B | 40.1 | 3.2 | 53.8 |
+| Qwen3-32B | 34.5 | 3.6 | 61.9 |
+| Qwen3.5-9B | 33.3 | 5.3 | 64.6 |
+| GPT-OSS-120B | 30.0 | 2.5 | 53.4 |
 
-<table>
-  <thead>
-    <tr>
-      <th rowspan="2" align="left">Model</th>
-      <th colspan="2" align="center">Task 1: Macro-F1 ↑</th>
-      <th colspan="2" align="center">Task 2: Macro DRR ↑</th>
-      <th colspan="2" align="center">Task 3: Macro-CAS ↑</th>
-    </tr>
-    <tr>
-      <th>Real</th><th>Synth.</th><th>Real</th><th>Synth.</th><th>Real</th><th>Synth.</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td colspan="7"><em>Frontier proprietary models</em></td></tr>
-    <tr><td>GPT-5.6-Sol</td><td><strong>67.5</strong></td><td><strong>86.4</strong></td><td><strong>9.6</strong></td><td><strong>12.2</strong></td><td><strong>80.6</strong></td><td><strong>96.2</strong></td></tr>
-    <tr><td>Claude Sonnet 5</td><td><u>59.3</u></td><td><u>76.2</u></td><td><u>6.8</u></td><td><u>11.4</u></td><td><u>76.8</u></td><td><u>94.5</u></td></tr>
-    <tr><td>Gemini 3.1 Pro Preview</td><td>45.8</td><td>67.3</td><td>3.4</td><td>7.6</td><td>68.9</td><td>91.6</td></tr>
-    <tr><td>DeepSeek-V3.2</td><td>44.5</td><td>67.2</td><td>5.9</td><td>8.0</td><td>62.9</td><td>93.0</td></tr>
-    <tr><td colspan="7"><em>Open-weight reasoning models</em></td></tr>
-    <tr><td>Qwen3.5-397B-A17B</td><td>57.5</td><td>55.9</td><td>3.3</td><td>4.6</td><td>72.0</td><td>89.0</td></tr>
-    <tr><td>GLM-5.2</td><td>45.1</td><td>65.9</td><td>5.7</td><td>7.0</td><td>63.6</td><td>77.0</td></tr>
-    <tr><td>DeepSeek-R1-0528</td><td>44.3</td><td>59.9</td><td>1.8</td><td>2.2</td><td>68.0</td><td>68.5</td></tr>
-    <tr><td>Kimi-K3</td><td>32.7</td><td>43.1</td><td>6.6</td><td>8.2</td><td>60.6</td><td>92.5</td></tr>
-    <tr><td colspan="7"><em>Open-weight general models</em></td></tr>
-    <tr><td>Gemma-4-31B-IT</td><td>47.1</td><td>56.9</td><td>4.7</td><td>7.0</td><td>67.7</td><td>73.0</td></tr>
-    <tr><td>Qwen3-8B</td><td>40.1</td><td>48.7</td><td>3.2</td><td>4.6</td><td>53.8</td><td>82.6</td></tr>
-    <tr><td>Qwen3-32B</td><td>34.5</td><td>37.0</td><td>3.6</td><td>5.8</td><td>61.9</td><td>76.3</td></tr>
-    <tr><td>Qwen3.5-9B</td><td>33.3</td><td>54.3</td><td>5.3</td><td>5.5</td><td>64.6</td><td>81.2</td></tr>
-    <tr><td>GPT-OSS-120B</td><td>30.0</td><td>44.4</td><td>2.5</td><td>3.3</td><td>53.4</td><td>65.3</td></tr>
-  </tbody>
-</table>
+#### Controlled synthetic
 
-</details>
+| Model | Readiness ↑ | Localization ↑ | Clarification ↑ |
+| --- | ---: | ---: | ---: |
+| *Frontier proprietary models* |  |  |  |
+| GPT-5.6-Sol | **86.4** | **12.2** | **96.2** |
+| Claude Sonnet 5 | *76.2* | *11.4* | *94.5* |
+| Gemini 3.1 Pro Preview | 67.3 | 7.6 | 91.6 |
+| DeepSeek-V3.2 | 67.2 | 8.0 | 93.0 |
+| *Open-weight reasoning models* |  |  |  |
+| Qwen3.5-397B-A17B | 55.9 | 4.6 | 89.0 |
+| GLM-5.2 | 65.9 | 7.0 | 77.0 |
+| DeepSeek-R1-0528 | 59.9 | 2.2 | 68.5 |
+| Kimi-K3 | 43.1 | 8.2 | 92.5 |
+| *Open-weight general models* |  |  |  |
+| Gemma-4-31B-IT | 56.9 | 7.0 | 73.0 |
+| Qwen3-8B | 48.7 | 4.6 | 82.6 |
+| Qwen3-32B | 37.0 | 5.8 | 76.3 |
+| Qwen3.5-9B | 54.3 | 5.5 | 81.2 |
+| GPT-OSS-120B | 44.4 | 3.3 | 65.3 |
 
-<sub><em>All scores are percentages; higher is better. Bold and underline indicate the best and second-best scores. Task 1 uses 100 READY and 100 NOT_READY specifications per subset. Tasks 2 and 3 use all 163 real-world instances and a fixed sample of 200 synthetic instances.</em></sub>
+<sub><em>All scores are percentages; higher is better. **Bold** and *italics* indicate the best and second-best scores in each column. Readiness = Macro-F1; Localization = Macro DRR; Clarification = Macro-CAS. Task 1 uses 100 READY and 100 NOT_READY specifications per subset. Tasks 2 and 3 use all 163 real-world instances and a fixed sample of 200 synthetic instances.</em></sub>
 
 ### What Changes When the Blocker Is Given?
 
 With GPT-5.6-Sol on the same 163 real-world instances, providing the annotated blocker raises clarification success by **67.0 percentage points**.
 
-<p align="center">
-  <a href="docs/tables/blocker.svg"><img src="docs/tables/blocker.svg" width="100%" alt="End-to-end versus defect-guided clarification results"></a>
-</p>
-
-<details>
-<summary>View table as text</summary>
-
 | Metric | End-to-End | Defect-Guided |
 | --- | ---: | ---: |
 | Macro-CAS ↑ | 13.6 | **80.6** |
 | Sufficiency ↑ | 8.6 | **80.4** |
-| No-Assumption ↑ | 96.3 | 95.7 |
-
-</details>
+| No-Assumption ↑ | **96.3** | 95.7 |
 
 ### Does Resolving the Gap Help Implementation?
 
 In the **oracle clarification study**, supplying the gold resolution raises the READY rate from **14% to 98%** on 50 real-world instances, evaluated by two human annotators blinded to the generation condition. On 20 controlled instances with bounded implementation components, oracle clarification also improves executable code:
-
-<p align="center">
-  <a href="docs/tables/implementation.svg"><img src="docs/tables/implementation.svg" width="100%" alt="Direct versus clarification-assisted implementation results"></a>
-</p>
-
-<details>
-<summary>View table as text</summary>
 
 | Metric | Direct Generation | Clarification-Assisted |
 | --- | ---: | ---: |
@@ -215,8 +171,6 @@ In the **oracle clarification study**, supplying the gold resolution raises the 
 | All Tests Pass ↑ | 45.0 | **85.0** |
 | Target Fidelity ↑ | 30.0 | **90.0** |
 | Further Clarification ↓ | 35.0 | **5.0** |
-
-</details>
 
 These utility studies supply the gold resolution and measure the benefit of successful clarification under oracle conditions.
 
@@ -282,22 +236,13 @@ See [Evaluation/README.md](Evaluation/README.md) for per-task runners, judging, 
 
 ### Repository Structure
 
-<p align="center">
-  <a href="docs/tables/repository.svg"><img src="docs/tables/repository.svg" width="100%" alt="Repository directories and contents"></a>
-</p>
-
-<details>
-<summary>View table as text</summary>
-
-| Path | Contents |
+| Directory | Contents |
 | --- | --- |
-| [Data/](Data/README.md) | Released benchmark, schema, and multi-defect ablation data |
-| [Real_Route/](Real_Route/README.md) | Real-world construction from GitHub issues and reproducibility reports |
-| [Syn_Route/](Syn_Route/README.md) | Controlled synthetic construction from reports and ideation–execution trajectories |
-| [Evaluation/](Evaluation/README.md) | Task 1–3 prompting, judging, scoring, and clarification studies |
-| [docs/](docs/README.md) | Paper figures used in this README and their source provenance |
-
-</details>
+| [Data](Data/README.md) | Benchmark files, schema, and multi-defect data |
+| [Real_Route](Real_Route/README.md) | Real-world gap construction |
+| [Syn_Route](Syn_Route/README.md) | Controlled synthetic construction |
+| [Evaluation](Evaluation/README.md) | Task runners, judging, scoring, and clarification studies |
+| [docs](docs/README.md) | Logo, badges, and paper figures |
 
 ---
 
