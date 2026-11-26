@@ -30,7 +30,7 @@
   <img src="docs/figures/pipeline.png" width="100%" alt="IdeaAMBIG construction pipeline: source artifacts, instance construction, and two-stage human verification">
 </p>
 <p align="center">
-  <em><strong>Evidence-grounded construction.</strong> GitHub issues, reproducibility reports, and executed research projects yield 660 verified instances with paired NOT_READY and READY specifications.</em>
+  <em><strong>Construction pipeline of IdeaAMBIG.</strong> ① Collect source artifacts from GitHub issues, reproducibility reports, and executed research. ② Reconstruct real-world gaps and inject single defects into codification-ready references. ③ Two-stage human verification yields 660 evidence-grounded instances.</em>
 </p>
 
 ---
